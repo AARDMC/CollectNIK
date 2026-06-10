@@ -49,7 +49,8 @@
         .form-icon-container{position:relative;z-index:1;margin-top:10px;display:flex;align-items:center;gap:10px}
         .form-icon-preview{width:36px;height:36px;background:rgba(255,255,255,0.12);border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden}.form-icon-preview svg{width:24px;height:24px;fill:#fff}
         .form-icon-input{flex:1;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.25);border-radius:5px;padding:5px 8px;font-size:11px;color:#fff;outline:none}.form-icon-input::placeholder{color:rgba(255,255,255,0.45)}
-        .auto-number-bar{display:flex;align-items:center;gap:8px;padding:8px 18px;background:var(--bg-tertiary);border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text)}
+        .auto-number-bar{display:flex;align-items:center;gap:20px;padding:10px 18px;background:var(--bg-tertiary);border-bottom:1px solid var(--border);font-size:12px;font-weight:600;color:var(--text)}
+        .auto-number-bar .toggle-group {display:flex;align-items:center;gap:8px}
         .toggle{position:relative;width:36px;height:20px}.toggle input{opacity:0;width:0;height:0}.toggle-slider{position:absolute;cursor:pointer;inset:0;background:#555;border-radius:20px;transition:var(--transition)}.toggle-slider:before{content:"";position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:var(--transition)}input:checked+.toggle-slider{background:var(--primary)}input:checked+.toggle-slider:before{transform:translateX(16px)}
         .canvas-body{padding:16px;min-height:250px}
         .empty-state{text-align:center;padding:70px 20px;color:var(--text-muted);border:2px dashed var(--border-light);border-radius:var(--radius-lg);margin:10px;transition:var(--transition)}.empty-state.drag-hover{border-color:var(--primary);background:rgba(249,115,22,0.04);color:var(--primary)}
@@ -74,8 +75,8 @@
         .collapse-icon{cursor:pointer;transition:transform 0.2s}.collapse-icon.collapsed{transform:rotate(-90deg)}
         .properties-panel{width:300px;background:var(--surface);border-left:1px solid var(--border);padding:16px;overflow-y:auto;flex-shrink:0}
         .properties-panel h3{font-size:11px;text-transform:uppercase;color:var(--primary);margin-bottom:14px;letter-spacing:1px;font-weight:700}
-        .prop-group{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}.prop-group label{font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:4px}
-        .prop-group input,.prop-group select{width:100%;padding:7px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;background:var(--bg-secondary);color:var(--text)}
+        .prop-group{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}.prop-group label.pg-title{font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:4px}
+        .prop-group input[type="text"], .prop-group input[type="number"], .prop-group select{width:100%;padding:7px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;background:var(--bg-secondary);color:var(--text)}
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000}
         .modal{background:var(--surface);border-radius:var(--radius-lg);padding:22px;max-width:90%;max-height:90%;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.5);border:1px solid var(--border)}
         .modal h2{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px}
@@ -182,8 +183,14 @@
                     <div class="form-icon-container"><div class="form-icon-preview" id="formIconPreview"></div><input class="form-icon-input" placeholder="Paste SVG icon code here..." id="formIconInput" oninput="updateFormIcon()"></div>
                 </div>
                 <div class="auto-number-bar">
-                    <label class="toggle"><input type="checkbox" id="autoNumberToggle" checked onchange="toggleAutoNumber()"><span class="toggle-slider"></span></label>
-                    <span>Auto-number questions</span>
+                    <div class="toggle-group">
+                        <label class="toggle"><input type="checkbox" id="autoNumberToggle" checked onchange="toggleAutoNumber()"><span class="toggle-slider"></span></label>
+                        <span>Auto-number in Form</span>
+                    </div>
+                    <div class="toggle-group">
+                        <label class="toggle"><input type="checkbox" id="hintsToggle" checked onchange="toggleHints()"><span class="toggle-slider"></span></label>
+                        <span>Show Hints in Builder</span>
+                    </div>
                 </div>
                 <div class="canvas-body" id="canvasBody">
                     <div class="empty-state" id="emptyState">
@@ -216,7 +223,6 @@
     <div class="modal-overlay" id="previewModal" style="display:none">
         <div class="modal" style="width:480px">
             <h2><svg class="icon icon-lg"><use href="#ic-eye"/></svg> Preview</h2>
-            <div style="margin-bottom:8px"><button class="btn btn-outline btn-sm" id="toggleHintsBtn" onclick="toggleHints()">Hide Hints</button></div>
             <div id="previewContent"></div>
             <div class="preview-nav" id="previewNav" style="display:none">
                 <button class="btn btn-outline btn-sm" onclick="prevStep()"><svg class="icon"><use href="#ic-chevron-left"/></svg> Back</button>
@@ -250,9 +256,9 @@
         let collapsedGroups={};
 
         const fieldDefaults={
-            text:{label:'Text Field',placeholder:'Type answer...',hint:'Short answer',required:false,skipLogic:null},
-            textarea:{label:'Paragraph',placeholder:'Type details...',hint:'Long answer',required:false,rows:3,skipLogic:null},
-            number:{label:'Number',placeholder:'Enter number...',hint:'Numeric value',required:false,min:null,max:null,skipLogic:null},
+            text:{label:'Text Field',placeholder:'Type answer...',hint:'Short answer',required:false,minLength:'',maxLength:'',regex:'',skipLogic:null},
+            textarea:{label:'Paragraph',placeholder:'Type details...',hint:'Long answer',required:false,rows:3,minLength:'',maxLength:'',regex:'',skipLogic:null},
+            number:{label:'Number',placeholder:'Enter number...',hint:'Numeric value',required:false,min:'',max:'',maxDigits:'',allowDecimal:false,skipLogic:null},
             select:{label:'Choose',placeholder:'Select...',hint:'Pick one option',required:false,options:['Option 1','Option 2','Option 3'],skipLogic:null},
             radio:{label:'Pick one',hint:'Single choice',required:false,options:['Choice A','Choice B','Choice C'],skipLogic:null},
             checkbox:{label:'Check all that apply',hint:'Multiple choices',required:false,options:['Item 1','Item 2','Item 3'],skipLogic:null},
@@ -275,6 +281,7 @@
         function fIcon(t){const m={text:'text',textarea:'textarea',number:'number',date:'date',select:'select',radio:'radio',checkbox:'checkbox',rating:'star',cascade:'cascade',photo:'camera',sound:'mic',video:'video',gps:'gps',barcode:'scan',document:'document',child_entry:'child',group:'folder',repeat:'repeat',table:'grid'};return icon(m[t]||'settings')}
 
         function toggleAutoNumber(){autoNumber=document.getElementById('autoNumberToggle').checked;renderCanvas()}
+        function toggleHints(){hintsVisible=document.getElementById('hintsToggle').checked;renderCanvas()}
 
         // Helper: find field by ID in nested structure
         function findFieldById(fields, id) {
@@ -288,7 +295,7 @@
             return null;
         }
 
-        // Remove field from its parent (returns parent array or null)
+        // Remove field from its parent
         function removeFieldById(id) {
             function removeFromList(list) {
                 const idx = list.findIndex(x => x.id === id);
@@ -318,7 +325,6 @@
             return null;
         }
 
-        // Sidebar drag start
         document.querySelectorAll('.field-type-item[draggable]').forEach(item => {
             item.addEventListener('dragstart', function(e) {
                 const payload = JSON.stringify({ source: 'sidebar', type: this.dataset.type });
@@ -329,9 +335,7 @@
             item.addEventListener('dragend', function(e) { this.classList.remove('dragging'); });
         });
 
-        // Determine which element we are dropping ABOVE based on mouse position
         function getInsertBeforeId(container, y) {
-            // Get all siblings in the current container context
             const siblings = [...container.querySelectorAll(':scope > .field-item:not(.dragging)')];
             const closest = siblings.reduce((closest, child) => {
                 const box = child.getBoundingClientRect();
@@ -342,22 +346,17 @@
                     return closest;
                 }
             }, { offset: Number.NEGATIVE_INFINITY }).element;
-            
             return closest ? closest.id : null;
         }
 
-        // Insert field at specific index helper
         function insertField(field, targetParentId, insertBeforeId) {
             if (!field) return;
-            
-            // Prevent dragging a group into itself or its own children
             let p = targetParentId;
             while(p) {
-                if(p === field.id) return; // Abort: Cannot drop into self
+                if(p === field.id) return;
                 const parentObj = findFieldById(formFields, p);
                 p = parentObj ? parentObj.parentId : null;
             }
-
             let targetList = formFields;
             if (targetParentId) {
                 const parent = findFieldById(formFields, targetParentId);
@@ -366,7 +365,6 @@
                     targetList = parent.children;
                 }
             }
-            
             if (insertBeforeId) {
                 const index = targetList.findIndex(f => f.id === insertBeforeId);
                 if (index !== -1) {
@@ -374,10 +372,9 @@
                     return;
                 }
             }
-            targetList.push(field); // Fallback to end
+            targetList.push(field); 
         }
 
-        // Highlight zones on hover
         canvasContainer.addEventListener('dragover', function(e) {
             e.preventDefault();
             const zone = e.target.closest('.group-drop-zone');
@@ -391,7 +388,6 @@
             document.querySelectorAll('.group-drop-zone').forEach(z => z.classList.remove('drag-over'));
         });
 
-        // The exact drop logic
         canvasContainer.addEventListener('drop', function(e) {
             e.preventDefault();
             canvasContainer.classList.remove('drag-over');
@@ -411,7 +407,6 @@
                     const id = 'f' + (++fieldIdCounter);
                     let defaults = JSON.parse(JSON.stringify(fieldDefaults[type]));
                     if (type === 'child_entry') defaults.children = [{...JSON.parse(JSON.stringify(fieldDefaults.text)), id:'cn_'+Date.now(), label:'Name'}];
-                    
                     const newField = {...defaults, id, type};
                     insertField(newField, parentId, insertBeforeId);
                     renderCanvas();
@@ -430,14 +425,10 @@
             }
         });
 
-        // Canvas item moving
         canvasContainer.addEventListener('dragstart', function(e) {
             const fieldItem = e.target.closest('.field-item[draggable]');
             if (!fieldItem) return;
-            
-            // Allow the UI to paint the visual 'dragging' state
             setTimeout(() => fieldItem.classList.add('dragging'), 0);
-            
             const payload = JSON.stringify({ source: 'canvas', fieldId: fieldItem.id });
             e.dataTransfer.setData('text/plain', payload);
             e.dataTransfer.effectAllowed = 'move';
@@ -448,7 +439,6 @@
             if (fieldItem) fieldItem.classList.remove('dragging');
         });
 
-        // Empty state initial drop
         if (emptyState) {
             emptyState.addEventListener('dragover', function(e) {
                 e.preventDefault();
@@ -478,17 +468,6 @@
             selectField(id);
         }
 
-        function addFieldToParent(type, parentId) {
-            const parent = findFieldById(formFields, parentId);
-            if (!parent) return;
-            if (!parent.children) parent.children = [];
-            const childId = 'c' + (++fieldIdCounter);
-            const defaults = JSON.parse(JSON.stringify(fieldDefaults[type]));
-            parent.children.push({...defaults, id: childId, type});
-            renderCanvas();
-            selectField(childId);
-        }
-
         function renderCanvas() {
             if (formFields.length === 0) {
                 canvasBody.innerHTML = '';
@@ -503,24 +482,27 @@
         function renderField(f,i,parentId) {
             const sel = f.id === selectedFieldId;
             const hasSkip = f.skipLogic && f.skipLogic.conditions?.length > 0;
-            const num = autoNumber ? i+1 : null;
+            const num = i + 1; // Always calculate number for builder index
             const colors = ['#F97316','#FB923C','#FDBA74','#EA580C','#C2410C'];
             const color = colors[i%5];
             const isCollapsed = collapsedGroups[f.id] === true;
             let childrenHTML = '';
+            
             if (['group','repeat','child_entry'].includes(f.type) && f.children && f.children.length) {
                 childrenHTML = `<div class="group-container" style="${isCollapsed?'display:none':''}"><div class="group-drop-zone" data-parent-id="${f.id}">${f.children.map((child,ci) => renderField(child,ci,f.id)).join('')}</div></div>`;
             } else if (['group','repeat','child_entry'].includes(f.type)) {
                 childrenHTML = `<div class="group-container" style="${isCollapsed?'display:none':''}"><div class="group-drop-zone" data-parent-id="${f.id}"></div></div>`;
             }
+            
             let collapseIcon = '';
             if (['group','repeat','child_entry'].includes(f.type)) {
                 collapseIcon = `<span class="collapse-icon ${isCollapsed?'collapsed':''}" onclick="event.stopPropagation();toggleCollapse('${f.id}')" style="margin-right:4px;font-size:14px;">${icon('chevron-down')}</span>`;
             }
+            
             return `
             <div class="field-item ${sel?'selected':''} ${hasSkip?'has-skip':''} ${parentId?'group-child-item':''}" id="${f.id}" data-parent-id="${parentId||''}" draggable="true" onclick="selectField('${f.id}')" style="border-left-color:${color};${parentId?'margin-left:15px;':''}">
-                ${num!==null?`<div class="field-number">${num}</div>`:''}
-                <div class="field-item-header" style="${num===null?'margin-left:0':''}">
+                <div class="field-number">${num}</div>
+                <div class="field-item-header">
                     ${collapseIcon}
                     <span class="field-btn" style="cursor:grab">${icon('drag')}</span>
                     <span class="field-badge field-badge-type">${fIcon(f.type)} ${f.type.toUpperCase()}</span>
@@ -534,11 +516,11 @@
                     </div>
                 </div>
                 ${hasSkip?`<div class="skip-logic-preview">🔀 ${getSkipText(f.skipLogic)}</div>`:''}
-                <div class="field-body" style="${num===null?'margin-left:0':''}">
+                <div class="field-body">
                     <div class="field-row">
                         <label>${f.label}${f.required?' <span class="required-star">*</span>':''}</label>
                         <input value="${f.label}" onchange="updateProp('${f.id}','label',this.value)" onclick="event.stopPropagation()">
-                        <span class="hint-text">💡 ${f.hint||''}</span>
+                        <span class="hint-text" style="${hintsVisible ? '' : 'display:none'}">💡 ${f.hint||''}</span>
                     </div>
                     ${renderFieldSpecific(f)}
                 </div>
@@ -659,7 +641,15 @@
             }
             renderCanvas();
         }
-        function updateProp(id,prop,val) { const f = findFieldById(formFields,id); if(f) { f[prop] = val; renderProperties(); } }
+        
+        function updateProp(id, prop, val) { 
+            const f = findFieldById(formFields, id); 
+            if(f) { 
+                f[prop] = val; 
+                // Notice we don't automatically renderCanvas here to avoid losing focus while typing inside properties panel
+            } 
+        }
+
         function addOption(id) { const f = findFieldById(formFields,id); if(f?.options) { f.options.push(`Option ${f.options.length+1}`); renderCanvas(); } }
         function removeOption(id,i) { const f = findFieldById(formFields,id); if(f?.options?.length>1) { f.options.splice(i,1); renderCanvas(); } }
         function updateOption(id,i,val) { const f = findFieldById(formFields,id); if(f?.options) f.options[i] = val; }
@@ -668,26 +658,68 @@
             const f = findFieldById(formFields,selectedFieldId);
             const c = document.getElementById('propertiesContent');
             if(!f) { c.innerHTML = '<p style="color:var(--text-muted);font-size:12px">Select a field</p>'; return; }
-            let h = `<div class="prop-group"><label>Type</label><input value="${f.type.toUpperCase()}" readonly></div>`;
-            if(f.type==='date') h += `<div class="prop-group"><label>Calendar</label><select onchange="updateProp('${f.id}','calendar',this.value);renderCanvas()"><option value="gregorian" ${f.calendar==='gregorian'?'selected':''}>Gregorian</option><option value="ethiopian" ${f.calendar==='ethiopian'?'selected':''}>Ethiopian 🇪🇹</option></select></div>`;
-            if(f.type==='child_entry') h += `<div class="prop-group"><label>ID Prefix</label><input value="${f.prefix||''}" onchange="updateProp('${f.id}','prefix',this.value)"></div><div class="prop-group"><label>Start #</label><input type="number" value="${f.startNumber||1}" onchange="updateProp('${f.id}','startNumber',parseInt(this.value))"></div>`;
-            if(f.type==='document') h += `<div class="prop-group"><label>Allowed Types</label><div style="font-size:10px">${(f.allowedTypes||[]).join(', ').toUpperCase()}</div></div>`;
-            h += `<div class="prop-group"><button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);width:100%" onclick="deleteField('${f.id}')">${icon('trash')} Delete</button></div>`;
+            
+            let h = `<div class="prop-group"><label class="pg-title">Field Type</label><input type="text" value="${f.type.toUpperCase()}" readonly style="background:var(--bg-tertiary);border-color:var(--border);color:var(--text-muted)"></div>`;
+            
+            // Universal Properties
+            h += `<div class="prop-group"><label class="pg-title">Required</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.required?'checked':''} onchange="updateProp('${f.id}','required',this.checked);renderCanvas()" style="width:auto"> Make this field required</label></div>`;
+            h += `<div class="prop-group"><label class="pg-title">Question Label</label><input type="text" value="${f.label||''}" onchange="updateProp('${f.id}','label',this.value);renderCanvas()"></div>`;
+            h += `<div class="prop-group"><label class="pg-title">Hint / Subtitle</label><input type="text" value="${f.hint||''}" onchange="updateProp('${f.id}','hint',this.value);renderCanvas()"></div>`;
+
+            // Smart Properties based on field type
+            if (['text', 'textarea', 'number', 'date', 'select'].includes(f.type)) {
+                h += `<div class="prop-group"><label class="pg-title">Placeholder Text</label><input type="text" value="${f.placeholder||''}" onchange="updateProp('${f.id}','placeholder',this.value);renderCanvas()"></div>`;
+            }
+
+            if (['text', 'textarea'].includes(f.type)) {
+                h += `<div class="prop-group"><label class="pg-title">Min Characters</label><input type="number" value="${f.minLength||''}" onchange="updateProp('${f.id}','minLength',this.value)"></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Max Characters</label><input type="number" value="${f.maxLength||''}" onchange="updateProp('${f.id}','maxLength',this.value)"></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Validation Regex</label><input type="text" value="${f.regex||''}" placeholder="e.g. ^[A-Za-z]+$" onchange="updateProp('${f.id}','regex',this.value)"></div>`;
+            }
+
+            if (f.type === 'number') {
+                h += `<div class="prop-group"><label class="pg-title">Min Value</label><input type="number" value="${f.min||''}" onchange="updateProp('${f.id}','min',this.value)"></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Max Value</label><input type="number" value="${f.max||''}" onchange="updateProp('${f.id}','max',this.value)"></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Max Digits Length</label><input type="number" value="${f.maxDigits||''}" onchange="updateProp('${f.id}','maxDigits',this.value)"></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Allow Decimal</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.allowDecimal?'checked':''} onchange="updateProp('${f.id}','allowDecimal',this.checked)" style="width:auto"> Yes</label></div>`;
+            }
+
+            if(f.type==='date') {
+                h += `<div class="prop-group"><label class="pg-title">Calendar System</label><select onchange="updateProp('${f.id}','calendar',this.value);renderCanvas()"><option value="gregorian" ${f.calendar==='gregorian'?'selected':''}>Gregorian 📅</option><option value="ethiopian" ${f.calendar==='ethiopian'?'selected':''}>Ethiopian 🇪🇹</option></select></div>`;
+            }
+
+            if(f.type==='child_entry') {
+                h += `<div class="prop-group"><label class="pg-title">ID Prefix</label><input type="text" value="${f.prefix||''}" onchange="updateProp('${f.id}','prefix',this.value)"></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Start Number</label><input type="number" value="${f.startNumber||1}" onchange="updateProp('${f.id}','startNumber',parseInt(this.value))"></div>`;
+            }
+
+            if(f.type==='document') {
+                h += `<div class="prop-group"><label class="pg-title">Allowed Types Summary</label><div style="font-size:10px;padding:6px;background:var(--bg-secondary);border-radius:4px">${(f.allowedTypes||[]).join(', ').toUpperCase() || 'None Selected'}</div></div>`;
+            }
+
+            h += `<div class="prop-group" style="margin-top:20px"><button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);width:100%" onclick="deleteField('${f.id}')">${icon('trash')} Delete Field</button></div>`;
             c.innerHTML = h;
         }
 
-        // Preview
-        function toggleHints() { hintsVisible = !hintsVisible; document.getElementById('toggleHintsBtn').textContent = hintsVisible?'Hide Hints':'Show Hints'; renderPreviewContent(); }
+        // Preview rendering
         function renderPreviewContent() {
             const s = formFields, ct = document.getElementById('previewContent');
             if(s.length===0) { ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px">No fields</p>'; return; }
             ct.innerHTML = s.map((f,i)=>{
-                let h = `<div class="preview-step ${i===0?'active':''}"><div style="padding:14px;background:var(--bg-secondary);border-radius:8px;margin-bottom:8px"><strong>${autoNumber?i+1+'. ':''}${f.label}${f.required?' <span style="color:red">*</span>':''}</strong>`;
+                // Incorporate autoNumber state into the visual text rendering
+                const numText = autoNumber ? (i + 1) + '. ' : '';
+                let h = `<div class="preview-step ${i===0?'active':''}"><div style="padding:14px;background:var(--bg-secondary);border-radius:8px;margin-bottom:8px"><strong>${numText}${f.label}${f.required?' <span style="color:red">*</span>':''}</strong>`;
+                
+                // Hide or show hints entirely based on hintsVisible flag (now located in builder toggle)
                 if(hintsVisible && f.hint) h += `<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">💡 ${f.hint}</div>`;
-                if(f.type==='date'&&f.calendar==='ethiopian') h += '<div style="margin-top:8px;padding:8px;background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;border-radius:6px;text-align:center">🇪🇹 Ethiopian Date Picker</div>';
-                else h += `<p style="color:var(--text-muted);font-size:11px;margin-top:4px">[${f.type}]</p>`;
+                
+                if(f.type==='date'&&f.calendar==='ethiopian') {
+                    h += '<div style="margin-top:8px;padding:8px;background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;border-radius:6px;text-align:center">🇪🇹 Ethiopian Date Picker</div>';
+                }
+                
                 return h + '</div></div>'}).join('');
         }
+        
         function previewForm() { renderPreviewContent(); document.getElementById('previewNav').style.display = formFields.length?'flex':'none'; previewStep=0; updatePreviewSteps(); document.getElementById('previewModal').style.display='flex'; }
         function nextStep() { if(previewStep<formFields.length-1) { previewStep++; updatePreviewSteps(); } }
         function prevStep() { if(previewStep>0) { previewStep--; updatePreviewSteps(); } }
