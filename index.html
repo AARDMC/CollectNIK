@@ -39,7 +39,7 @@
         .field-type-item:hover{border-color:var(--primary);background:rgba(249,115,22,0.08);transform:translateX(3px);box-shadow:0 0 14px rgba(249,115,22,0.12)}.field-type-item:active{cursor:grabbing;transform:scale(0.97)}.field-type-item.dragging{opacity:0.5;transform:scale(0.95)}
         .field-type-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(249,115,22,0.18),rgba(234,88,12,0.18));border-radius:5px;color:var(--primary);border:1px solid rgba(249,115,22,0.25)}
         .field-type-name{font-weight:600;font-size:12px;color:var(--text)}.field-type-desc{font-size:9px;color:var(--text-muted)}
-        .canvas-container{flex:1;overflow-y:auto;padding:18px;background:linear-gradient(135deg,var(--bg),var(--bg-secondary));transition:background 0.3s}
+        .canvas-container{flex:1;overflow-y:auto;padding:18px;background:linear-gradient(135deg,var(--bg),var(--bg-secondary));transition:background 0.3s;position:relative}
         .canvas-container.drag-over{outline:3px dashed var(--primary)!important;outline-offset:-6px;background:rgba(249,115,22,0.04)}
         .canvas{max-width:750px;margin:0 auto;background:var(--surface);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.4);border:1px solid var(--border);min-height:300px}
         .canvas-header{padding:24px;background:linear-gradient(135deg,#C2410C,#F97316,#FDBA74);border-radius:var(--radius-lg) var(--radius-lg) 0 0;color:#fff;position:relative;overflow:hidden}
@@ -55,6 +55,7 @@
         .empty-state{text-align:center;padding:70px 20px;color:var(--text-muted);border:2px dashed var(--border-light);border-radius:var(--radius-lg);margin:10px;transition:var(--transition)}.empty-state.drag-hover{border-color:var(--primary);background:rgba(249,115,22,0.04);color:var(--primary)}
         .field-item{background:var(--bg-tertiary);border:2px solid var(--border-light);border-radius:var(--radius);padding:14px;margin-bottom:10px;transition:var(--transition);position:relative;border-left:4px solid var(--primary);cursor:default}
         .field-item:hover{box-shadow:0 0 20px var(--primary-glow);border-color:var(--primary)}.field-item.selected{border-color:var(--primary);box-shadow:0 0 0 3px rgba(249,115,22,0.2)}
+        .field-item.dragging { opacity: 0.5; border: 2px dashed var(--primary); transform: scale(0.98); background: rgba(249,115,22,0.05); }
         .field-number{position:absolute;top:-9px;left:-9px;width:24px;height:24px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;z-index:1;box-shadow:0 0 8px var(--primary-glow)}
         .field-item-header{display:flex;align-items:center;gap:7px;margin-bottom:10px;margin-left:18px}
         .field-badge{padding:2px 8px;border-radius:16px;font-size:9px;font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:3px}.field-badge-type{background:var(--primary);color:#fff}
@@ -89,7 +90,6 @@
 </head>
 <body class="dark-mode">
     <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
-        <!-- all icons as before -->
         <symbol id="ic-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7V4h16v3M9 20h6M12 4v16"/></symbol>
         <symbol id="ic-textarea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/></symbol>
         <symbol id="ic-number" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 7v10M12 7v4M16 7v10"/></symbol>
@@ -185,7 +185,12 @@
                     <label class="toggle"><input type="checkbox" id="autoNumberToggle" checked onchange="toggleAutoNumber()"><span class="toggle-slider"></span></label>
                     <span>Auto-number questions</span>
                 </div>
-                <div class="canvas-body" id="canvasBody"></div>
+                <div class="canvas-body" id="canvasBody">
+                    <div class="empty-state" id="emptyState">
+                        <svg class="icon icon-2xl" style="color:var(--text-muted);margin-bottom:10px"><use href="#ic-plus"/></svg>
+                        <p>Drag and drop fields from the left sidebar to start building your form.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -195,7 +200,6 @@
         </div>
     </div>
 
-    <!-- Skip Logic Modal -->
     <div class="modal-overlay" id="skipLogicModal" style="display:none">
         <div class="modal" style="width:600px">
             <h2><svg class="icon icon-lg" style="color:#F59E0B"><use href="#ic-skip"/></svg> Skip Logic</h2>
@@ -209,7 +213,6 @@
         </div>
     </div>
 
-    <!-- Preview Modal -->
     <div class="modal-overlay" id="previewModal" style="display:none">
         <div class="modal" style="width:480px">
             <h2><svg class="icon icon-lg"><use href="#ic-eye"/></svg> Preview</h2>
@@ -225,7 +228,7 @@
     </div>
 
     <script>
-        // Theme
+        // Theme and icon functions
         function setTheme(mode){localStorage.setItem('fbtheme',mode);applyTheme(mode)}
         function applyTheme(mode){
             document.body.classList.remove('dark-mode','light-mode');
@@ -301,26 +304,7 @@
             return removeFromList(formFields);
         }
 
-        // Move field to a parent (targetParentId) or to root if null
-        function moveFieldToParent(fieldId, targetParentId) {
-            const field = removeFieldById(fieldId);
-            if (!field) return;
-            if (targetParentId) {
-                const parent = findFieldById(formFields, targetParentId);
-                if (parent && ['group','repeat','child_entry'].includes(parent.type)) {
-                    if (!parent.children) parent.children = [];
-                    parent.children.push(field);
-                } else {
-                    formFields.push(field);
-                }
-            } else {
-                formFields.push(field);
-            }
-            renderCanvas();
-            selectField(fieldId);
-        }
-
-        // ============ DRAG & DROP (Fully working) ============
+        // ============ UPGRADED DRAG & DROP ============
         const canvasContainer = document.getElementById('canvasContainer');
         const canvasBody = document.getElementById('canvasBody');
         const emptyState = document.getElementById('emptyState');
@@ -345,104 +329,145 @@
             item.addEventListener('dragend', function(e) { this.classList.remove('dragging'); });
         });
 
-        // Canvas container – primary drop target
+        // Determine which element we are dropping ABOVE based on mouse position
+        function getInsertBeforeId(container, y) {
+            // Get all siblings in the current container context
+            const siblings = [...container.querySelectorAll(':scope > .field-item:not(.dragging)')];
+            const closest = siblings.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2; 
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+            
+            return closest ? closest.id : null;
+        }
+
+        // Insert field at specific index helper
+        function insertField(field, targetParentId, insertBeforeId) {
+            if (!field) return;
+            
+            // Prevent dragging a group into itself or its own children
+            let p = targetParentId;
+            while(p) {
+                if(p === field.id) return; // Abort: Cannot drop into self
+                const parentObj = findFieldById(formFields, p);
+                p = parentObj ? parentObj.parentId : null;
+            }
+
+            let targetList = formFields;
+            if (targetParentId) {
+                const parent = findFieldById(formFields, targetParentId);
+                if (parent && ['group','repeat','child_entry'].includes(parent.type)) {
+                    if (!parent.children) parent.children = [];
+                    targetList = parent.children;
+                }
+            }
+            
+            if (insertBeforeId) {
+                const index = targetList.findIndex(f => f.id === insertBeforeId);
+                if (index !== -1) {
+                    targetList.splice(index, 0, field);
+                    return;
+                }
+            }
+            targetList.push(field); // Fallback to end
+        }
+
+        // Highlight zones on hover
         canvasContainer.addEventListener('dragover', function(e) {
             e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-            this.classList.add('drag-over');
-            // Highlight group zones if hovering over them
             const zone = e.target.closest('.group-drop-zone');
+            document.querySelectorAll('.group-drop-zone').forEach(z => z.classList.remove('drag-over'));
             if (zone) zone.classList.add('drag-over');
+            canvasContainer.classList.add('drag-over');
         });
+
         canvasContainer.addEventListener('dragleave', function(e) {
-            if (e.target === this) this.classList.remove('drag-over');
-            const zone = e.target.closest('.group-drop-zone');
-            if (zone) zone.classList.remove('drag-over');
+            if (e.target === canvasContainer) canvasContainer.classList.remove('drag-over');
+            document.querySelectorAll('.group-drop-zone').forEach(z => z.classList.remove('drag-over'));
         });
+
+        // The exact drop logic
         canvasContainer.addEventListener('drop', function(e) {
             e.preventDefault();
-            this.classList.remove('drag-over');
-            document.querySelectorAll('.group-drop-zone.drag-over').forEach(z => z.classList.remove('drag-over'));
+            canvasContainer.classList.remove('drag-over');
+            document.querySelectorAll('.group-drop-zone').forEach(z => z.classList.remove('drag-over'));
 
             let payload;
             try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
             if (!payload || !payload.source) return;
 
+            const dropZone = e.target.closest('.group-drop-zone') || canvasBody;
             const parentId = findParentGroupId(e.target);
+            const insertBeforeId = getInsertBeforeId(dropZone, e.clientY);
 
             if (payload.source === 'sidebar') {
                 const type = payload.type;
                 if (type && fieldDefaults[type]) {
-                    if (parentId) addFieldToParent(type, parentId);
-                    else addField(type);
+                    const id = 'f' + (++fieldIdCounter);
+                    let defaults = JSON.parse(JSON.stringify(fieldDefaults[type]));
+                    if (type === 'child_entry') defaults.children = [{...JSON.parse(JSON.stringify(fieldDefaults.text)), id:'cn_'+Date.now(), label:'Name'}];
+                    
+                    const newField = {...defaults, id, type};
+                    insertField(newField, parentId, insertBeforeId);
+                    renderCanvas();
+                    selectField(id);
                 }
             } else if (payload.source === 'canvas') {
                 const fieldId = payload.fieldId;
                 if (fieldId) {
-                    moveFieldToParent(fieldId, parentId || null);
+                    const field = removeFieldById(fieldId);
+                    if (field) {
+                        insertField(field, parentId, insertBeforeId);
+                        renderCanvas();
+                        selectField(fieldId);
+                    }
                 }
             }
         });
 
-        // Empty state (only when no fields exist)
-        emptyState.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = 'copy';
-            this.classList.add('drag-hover');
-        });
-        emptyState.addEventListener('dragleave', function(e) { this.classList.remove('drag-hover'); });
-        emptyState.addEventListener('drop', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.classList.remove('drag-hover');
-            let payload;
-            try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
-            if (payload.source === 'sidebar' && payload.type && fieldDefaults[payload.type]) {
-                addField(payload.type);
-            }
+        // Canvas item moving
+        canvasContainer.addEventListener('dragstart', function(e) {
+            const fieldItem = e.target.closest('.field-item[draggable]');
+            if (!fieldItem) return;
+            
+            // Allow the UI to paint the visual 'dragging' state
+            setTimeout(() => fieldItem.classList.add('dragging'), 0);
+            
+            const payload = JSON.stringify({ source: 'canvas', fieldId: fieldItem.id });
+            e.dataTransfer.setData('text/plain', payload);
+            e.dataTransfer.effectAllowed = 'move';
         });
 
-        // Make existing field items draggable (for moving)
-        function makeFieldsDraggable() {
-            document.querySelectorAll('.field-item[draggable]').forEach(item => {
-                // Remove existing listeners by cloning
-                const newItem = item.cloneNode(true);
-                item.parentNode.replaceChild(newItem, item);
-                newItem.addEventListener('dragstart', function(e) {
-                    const payload = JSON.stringify({ source: 'canvas', fieldId: this.id });
-                    e.dataTransfer.setData('text/plain', payload);
-                    e.dataTransfer.effectAllowed = 'move';
-                });
-            });
-        }
+        canvasContainer.addEventListener('dragend', function(e) {
+            const fieldItem = e.target.closest('.field-item[draggable]');
+            if (fieldItem) fieldItem.classList.remove('dragging');
+        });
 
-        // Group drop zones – accept drops and stop propagation
-        function attachGroupDropListeners() {
-            document.querySelectorAll('.group-drop-zone').forEach(zone => {
-                zone.addEventListener('dragover', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.dataTransfer.dropEffect = 'move';
-                    this.classList.add('drag-over');
-                });
-                zone.addEventListener('dragleave', function(e) {
-                    this.classList.remove('drag-over');
-                });
-                zone.addEventListener('drop', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    this.classList.remove('drag-over');
-                    let payload;
-                    try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
-                    const parentId = this.dataset.parentId;
-                    if (payload.source === 'sidebar' && payload.type && fieldDefaults[payload.type]) {
-                        addFieldToParent(payload.type, parentId);
-                    } else if (payload.source === 'canvas' && payload.fieldId) {
-                        moveFieldToParent(payload.fieldId, parentId);
-                    }
-                });
+        // Empty state initial drop
+        if (emptyState) {
+            emptyState.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'copy';
+                this.classList.add('drag-hover');
+            });
+            emptyState.addEventListener('dragleave', function(e) { this.classList.remove('drag-hover'); });
+            emptyState.addEventListener('drop', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                this.classList.remove('drag-hover');
+                let payload;
+                try { payload = JSON.parse(e.dataTransfer.getData('text/plain')); } catch (err) { return; }
+                if (payload.source === 'sidebar' && payload.type && fieldDefaults[payload.type]) {
+                    addField(payload.type); 
+                }
             });
         }
+        // ============ END DRAG & DROP ============
 
         function addField(type, props={}) {
             const id = 'f' + (++fieldIdCounter);
@@ -473,8 +498,6 @@
             }
             emptyState.style.display = 'none';
             canvasBody.innerHTML = formFields.map((f,i) => renderField(f,i,null)).join('');
-            makeFieldsDraggable();
-            attachGroupDropListeners();
         }
 
         function renderField(f,i,parentId) {
