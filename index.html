@@ -30,7 +30,8 @@
         .btn{padding:7px 14px;border:none;border-radius:var(--radius);cursor:pointer;font-size:12px;font-weight:600;transition:var(--transition);display:flex;align-items:center;gap:6px;white-space:nowrap}
         .btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;box-shadow:0 0 18px var(--primary-glow)}.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 28px var(--primary-glow)}
         .btn-outline{background:transparent;border:2px solid var(--border-light);color:var(--text)}.btn-outline:hover{border-color:var(--primary);background:rgba(249,115,22,0.08);color:var(--primary)}
-        .btn-success{background:linear-gradient(135deg,var(--secondary),var(--primary-dark));color:#fff}.btn-sm{padding:5px 10px;font-size:11px}
+        .btn-success{background:linear-gradient(135deg,#10B981,#059669);color:#fff}.btn-success:hover{background:#059669;box-shadow:0 0 18px rgba(16,185,129,0.3)}
+        .btn-sm{padding:5px 10px;font-size:11px}
         .main-container{display:flex;height:calc(100vh - 52px)}
         .sidebar{width:280px;background:var(--surface);border-right:1px solid var(--border);padding:14px;overflow-y:auto;flex-shrink:0}
         .sidebar-section{margin-bottom:18px}.sidebar h3{font-size:10px;text-transform:uppercase;color:var(--primary);margin-bottom:8px;letter-spacing:1.2px;font-weight:700;border-bottom:1px solid rgba(249,115,22,0.2);padding-bottom:5px}
@@ -73,30 +74,57 @@
         .group-drop-zone{min-height:50px;padding:8px;transition:var(--transition)}.group-drop-zone:empty::after{content:'Drop questions here';display:block;text-align:center;color:var(--text-muted);font-size:11px;padding:15px}
         .group-child-item{margin-left:12px;margin-bottom:6px}
         .collapse-icon{cursor:pointer;transition:transform 0.2s}.collapse-icon.collapsed{transform:rotate(-90deg)}
+        
         .properties-panel{width:300px;background:var(--surface);border-left:1px solid var(--border);padding:16px;overflow-y:auto;flex-shrink:0}
         .properties-panel h3{font-size:11px;text-transform:uppercase;color:var(--primary);margin-bottom:14px;letter-spacing:1px;font-weight:700}
         .prop-group{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}.prop-group label.pg-title{font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:4px}
         .prop-group input[type="text"], .prop-group input[type="number"], .prop-group select{width:100%;padding:7px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;background:var(--bg-secondary);color:var(--text)}
+        
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000}
-        .modal{background:var(--surface);border-radius:var(--radius-lg);padding:22px;max-width:90%;max-height:90%;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.5);border:1px solid var(--border)}
-        .modal h2{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px}
+        .modal{background:var(--surface);border-radius:var(--radius-lg);padding:0;max-width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.5);border:1px solid var(--border); display:flex;flex-direction:column;}
+        .modal-inner{padding:22px;}
+        .modal-inner h2{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px}
         .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
         
-        /* Preview Modal Specifics */
+        /* Premium Smart Preview Styling */
+        .preview-header-block { background: linear-gradient(135deg, var(--primary), var(--accent)); padding: 24px; color: #fff; border-radius: var(--radius-lg) var(--radius-lg) 0 0; display:flex; align-items:center; gap: 16px; flex-shrink:0; }
+        .preview-header-icon { width: 48px; height: 48px; background: rgba(255,255,255,0.2); border-radius: 10px; display:flex; align-items:center; justify-content:center; font-size:24px; }
+        .preview-header-icon svg { width: 28px; height: 28px; fill: #fff; }
+        .preview-header-content h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+        .preview-header-content p { font-size: 13px; opacity: 0.85; }
+        
+        .preview-body { padding: 24px; flex:1; overflow-y:auto; background: var(--bg); }
         .preview-step{display:none;animation:fadeIn 0.25s ease}.preview-step.active{display:block}
         @keyframes fadeIn{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:translateX(0)}}
-        .preview-nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+        
+        .preview-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--radius-lg) var(--radius-lg);}
         .step-indicator{display:flex;gap:5px}.step-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}.step-dot.active{background:var(--primary);width:20px;border-radius:4px}
         .ethiopian-date-badge{display:inline-block;background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:600}
         .required-star{color:var(--danger);font-weight:700}
         
-        .preview-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; background: var(--bg); color: var(--text); font-family: inherit; font-size: 13px; margin-top: 6px; outline: none; transition: var(--transition); }
+        /* Realistic Form UI */
+        .preview-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; background: var(--surface); color: var(--text); font-family: inherit; font-size: 13px; margin-top: 6px; outline: none; transition: var(--transition); }
         .preview-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(249,115,22,0.1); }
         .preview-options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        .preview-options label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--text); }
+        .preview-options label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--text); background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-light); transition: var(--transition); }
+        .preview-options label:hover { border-color: var(--primary); background: rgba(249,115,22,0.05); }
         .preview-options input[type="radio"], .preview-options input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
-        .preview-mock-input { padding: 12px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-light); border-radius: 6px; text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+        
+        .preview-media-grid { display: flex; gap: 10px; margin-top: 8px; }
+        .preview-media-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border: 1px dashed var(--primary); border-radius: 6px; color: var(--primary); background: rgba(249,115,22,0.05); font-weight: 600; font-size: 12px; cursor: pointer; transition: var(--transition); }
+        .preview-media-btn:hover { background: var(--primary); color: #fff; }
+        
+        .preview-table { width: 100%; border-collapse: collapse; margin-top: 8px; border-radius: 6px; overflow: hidden; }
+        .preview-table th { background: var(--bg-tertiary); color: var(--primary); font-size: 11px; text-transform: uppercase; padding: 10px; text-align: left; border: 1px solid var(--border-light); }
+        .preview-table td { padding: 0; border: 1px solid var(--border-light); }
+        .preview-table input { width: 100%; border: none; background: transparent; padding: 10px; color: var(--text); outline: none; font-size: 12px; }
+        
         .preview-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
+        .preview-container-box { padding: 14px; border-left: 3px solid var(--primary); background: var(--surface); border-radius: 0 8px 8px 0; margin-top: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .add-entry-btn { width: 100%; padding: 10px; margin-top: 10px; border: 1px dashed var(--border-light); border-radius: 6px; background: transparent; color: var(--text-muted); cursor: pointer; transition: var(--transition); font-weight: 600; font-size: 12px; }
+        .add-entry-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(249,115,22,0.05); }
+
+        .submit-zone { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
     </style>
 </head>
 <body class="dark-mode">
@@ -105,6 +133,7 @@
         <symbol id="ic-textarea" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h10M7 13h6"/></symbol>
         <symbol id="ic-number" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 7v10M12 7v4M16 7v10"/></symbol>
         <symbol id="ic-date" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+        <symbol id="ic-time" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
         <symbol id="ic-select" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M8 10l4 4 4-4"/></symbol>
         <symbol id="ic-radio" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3" fill="currentColor"/></symbol>
         <symbol id="ic-checkbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 6-6"/></symbol>
@@ -159,6 +188,7 @@
                 <div class="field-type-item" draggable="true" data-type="textarea"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-textarea"/></svg></div><div class="field-type-info"><div class="field-type-name">Paragraph</div><div class="field-type-desc">Long text</div></div></div>
                 <div class="field-type-item" draggable="true" data-type="number"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-number"/></svg></div><div class="field-type-info"><div class="field-type-name">Number</div><div class="field-type-desc">Numeric</div></div></div>
                 <div class="field-type-item" draggable="true" data-type="date"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-date"/></svg></div><div class="field-type-info"><div class="field-type-name">Date</div><div class="field-type-desc">Calendar</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="time"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-time"/></svg></div><div class="field-type-info"><div class="field-type-name">Time</div><div class="field-type-desc">Clock Selector</div></div></div>
             </div></div>
             <div class="sidebar-section"><h3>☑️ Choice</h3><div class="field-types">
                 <div class="field-type-item" draggable="true" data-type="select"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-select"/></svg></div><div class="field-type-info"><div class="field-type-name">Dropdown</div><div class="field-type-desc">Single select</div></div></div>
@@ -214,7 +244,7 @@
     </div>
 
     <div class="modal-overlay" id="skipLogicModal" style="display:none">
-        <div class="modal" style="width:600px">
+        <div class="modal-inner" style="background:var(--surface); border-radius:var(--radius-lg); width:600px">
             <h2><svg class="icon icon-lg" style="color:#F59E0B"><use href="#ic-skip"/></svg> Skip Logic</h2>
             <div id="skipLogicContent"></div>
             <div class="modal-actions">
@@ -226,16 +256,31 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="previewModal" style="display:none">
-        <div class="modal" style="width:550px">
-            <h2><svg class="icon icon-lg"><use href="#ic-eye"/></svg> Preview</h2>
-            <div id="previewContent"></div>
+    <div class="modal-overlay" id="previewModal" style="display:none; padding:20px;">
+        <div class="modal" style="width:750px; height: 100%;">
+            
+            <div class="preview-header-block" id="previewHeaderBlock">
+                </div>
+
+            <div class="preview-body" id="previewContent">
+                </div>
+
             <div class="preview-nav" id="previewNav" style="display:none">
                 <button class="btn btn-outline btn-sm" onclick="prevStep()"><svg class="icon"><use href="#ic-chevron-left"/></svg> Back</button>
                 <div class="step-indicator" id="stepIndicator"></div>
-                <button class="btn btn-primary btn-sm" onclick="nextStep()">Next <svg class="icon"><use href="#ic-chevron-right"/></svg></button>
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-primary btn-sm" onclick="nextStep()" id="previewNextBtn">Next <svg class="icon"><use href="#ic-chevron-right"/></svg></button>
+                    <div id="previewSubmitContainer" style="display:none; gap:8px;">
+                        <button class="btn btn-outline btn-sm">Save Draft</button>
+                        <button class="btn btn-success btn-sm"><svg class="icon"><use href="#ic-save"/></svg> Submit</button>
+                    </div>
+                </div>
             </div>
-            <div class="modal-actions"><button class="btn btn-outline btn-sm" onclick="closePreview()">Close</button></div>
+            
+            <div style="position:absolute; top: 15px; right: 15px; z-index: 100;">
+                <button class="btn btn-outline btn-sm" style="background: var(--surface); box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onclick="closePreview()">Close</button>
+            </div>
+
         </div>
     </div>
 
@@ -256,7 +301,7 @@
         function getFormIcon(){return document.getElementById('formIconInput').value}
         function setFormIcon(c){document.getElementById('formIconInput').value=c;updateFormIcon()}
 
-        // State
+        // State & Defaults
         let formFields=[],selectedFieldId=null,fieldIdCounter=0,autoNumber=true;
         let tempSkipLogic=null,currentFieldForLogic=null,previewStep=0;
         let collapsedGroups={};
@@ -265,10 +310,11 @@
             text:{label:'Text Field',placeholder:'Type answer...',hint:'Short answer',showHint:true,required:false,minLength:'',maxLength:'',regex:'',skipLogic:null},
             textarea:{label:'Paragraph',placeholder:'Type details...',hint:'Long answer',showHint:true,required:false,rows:3,minLength:'',maxLength:'',regex:'',skipLogic:null},
             number:{label:'Number',placeholder:'Enter number...',hint:'Numeric value',showHint:true,required:false,min:'',max:'',maxDigits:'',allowDecimal:false,skipLogic:null},
+            date:{label:'Date',hint:'Select date',showHint:true,required:false,calendar:'gregorian',format:'YYYY-MM-DD',noFuture:false,skipLogic:null},
+            time:{label:'Time',hint:'Select time',showHint:true,required:false,skipLogic:null},
             select:{label:'Choose',placeholder:'Select...',hint:'Pick one option',showHint:true,required:false,options:['Option 1','Option 2','Option 3'],skipLogic:null},
-            radio:{label:'Pick one',hint:'Single choice',showHint:true,required:false,options:['Choice A','Choice B','Choice C'],skipLogic:null},
-            checkbox:{label:'Check all that apply',hint:'Multiple choices',showHint:true,required:false,options:['Item 1','Item 2','Item 3'],skipLogic:null},
-            date:{label:'Date',hint:'Select date',showHint:true,required:false,calendar:'gregorian',skipLogic:null},
+            radio:{label:'Pick one',hint:'Single choice',showHint:true,required:false,shuffle:false,options:['Choice A','Choice B','Choice C'],skipLogic:null},
+            checkbox:{label:'Check all that apply',hint:'Multiple choices',showHint:true,required:false,shuffle:false,options:['Item 1','Item 2','Item 3'],skipLogic:null},
             gps:{label:'Location',hint:'GPS coordinates',showHint:true,required:false,skipLogic:null},
             photo:{label:'Photo',hint:'Take picture',showHint:true,required:false,skipLogic:null},
             sound:{label:'Audio',hint:'Record audio',showHint:true,required:false,maxDuration:120,skipLogic:null},
@@ -284,7 +330,7 @@
         };
 
         function icon(id,s=''){return`<svg class="icon${s?' icon-'+s:''}"><use href="#ic-${id}"/></svg>`}
-        function fIcon(t){const m={text:'text',textarea:'textarea',number:'number',date:'date',select:'select',radio:'radio',checkbox:'checkbox',rating:'star',cascade:'cascade',photo:'camera',sound:'mic',video:'video',gps:'gps',barcode:'scan',document:'document',child_entry:'child',group:'folder',repeat:'repeat',table:'grid'};return icon(m[t]||'settings')}
+        function fIcon(t){const m={text:'text',textarea:'textarea',number:'number',date:'date',time:'time',select:'select',radio:'radio',checkbox:'checkbox',rating:'star',cascade:'cascade',photo:'camera',sound:'mic',video:'video',gps:'gps',barcode:'scan',document:'document',child_entry:'child',group:'folder',repeat:'repeat',table:'grid'};return icon(m[t]||'settings')}
 
         function toggleAutoNumber(){autoNumber=document.getElementById('autoNumberToggle').checked;renderCanvas()}
 
@@ -300,7 +346,6 @@
             return null;
         }
 
-        // Remove field from its parent
         function removeFieldById(id) {
             function removeFromList(list) {
                 const idx = list.findIndex(x => x.id === id);
@@ -537,10 +582,11 @@
             if(['select','radio','checkbox'].includes(f.type)) {
                 return `<div class="field-row"><label>Options</label>${f.options.map((o,i)=>`<div style="display:flex;gap:4px;margin-bottom:3px"><input value="${o}" onchange="updateOption('${f.id}',${i},this.value)" onclick="event.stopPropagation()" style="flex:1"><button class="field-btn delete" onclick="event.stopPropagation();removeOption('${f.id}',${i})">${icon('trash')}</button></div>`).join('')}<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();addOption('${f.id}')" style="margin-top:3px">${icon('plus')} Add</button></div>`;
             }
-            if(f.type==='cascade') return `<div class="field-row"><label>Cascade</label><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();importCSV('${f.id}')">${icon('settings')} Configure Levels</button></div>`;
-            if(f.type==='table') return `<div class="field-row"><label>Table (${f.columns?.length||0}×${f.rows||0})</label><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();editTable('${f.id}')">${icon('settings')} Configure</button></div>`;
+            if(f.type==='cascade') return `<div class="field-row"><label>Cascade</label><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();importCSV('${f.id}')">${icon('settings')} Configure Levels (CSV/Manual)</button></div>`;
+            if(f.type==='table') return `<div class="field-row"><label>Table (${f.columns?.length||0}×${f.rows||0})</label><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();editTable('${f.id}')">${icon('settings')} Configure Grid</button></div>`;
             if(['group','repeat','child_entry'].includes(f.type)) return `<div class="field-row"><label>Container (${f.children?.length||0} fields)</label></div>`;
             if(f.type==='date') return `<div class="field-row"><label>Calendar <span class="ethiopian-date-badge" style="${f.calendar==='ethiopian'?'':'display:none'}">🇪🇹 Ethiopian</span></label><button class="btn btn-outline btn-sm" onclick="event.stopPropagation();toggleDateCalendar('${f.id}')">Switch to ${f.calendar==='gregorian'?'Ethiopian 🇪🇹':'Gregorian 📅'}</button></div>`;
+            if(f.type==='time') return `<div class="field-row"><label>Time Format</label><input type="time" disabled style="opacity:0.6" value="12:00"></div>`;
             if(f.type==='document') {
                 const types = f.allowedTypes||['pdf','doc','docx','jpg','png'];
                 return `<div class="field-row"><label>Allowed File Types</label><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">${['pdf','doc','docx','xls','xlsx','jpg','jpeg','png','gif','mp4','mp3'].map(t=>`<label style="font-size:10px;display:flex;align-items:center;gap:2px"><input type="checkbox" ${types.includes(t)?'checked':''} onclick="toggleDocType('${f.id}','${t}',this.checked)" style="width:auto"> ${t.toUpperCase()}</label>`).join('')}</div></div>`;
@@ -659,7 +705,7 @@
         function renderProperties() {
             const f = findFieldById(formFields,selectedFieldId);
             const c = document.getElementById('propertiesContent');
-            if(!f) { c.innerHTML = '<p style="color:var(--text-muted);font-size:12px">Select a field</p>'; return; }
+            if(!f) { c.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:40px">Select a field to configure logic</p>'; return; }
             
             let h = `<div class="prop-group"><label class="pg-title">Field Type</label><input type="text" value="${f.type.toUpperCase()}" readonly style="background:var(--bg-tertiary);border-color:var(--border);color:var(--text-muted)"></div>`;
             
@@ -687,8 +733,14 @@
                 h += `<div class="prop-group"><label class="pg-title">Allow Decimal</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.allowDecimal?'checked':''} onchange="updateProp('${f.id}','allowDecimal',this.checked)" style="width:auto"> Yes</label></div>`;
             }
 
+            if (['radio', 'checkbox'].includes(f.type)) {
+                h += `<div class="prop-group"><label class="pg-title">Shuffle Options</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.shuffle?'checked':''} onchange="updateProp('${f.id}','shuffle',this.checked)" style="width:auto"> Randomize display order</label></div>`;
+            }
+
             if(f.type==='date') {
                 h += `<div class="prop-group"><label class="pg-title">Calendar System</label><select onchange="updateProp('${f.id}','calendar',this.value);renderCanvas()"><option value="gregorian" ${f.calendar==='gregorian'?'selected':''}>Gregorian 📅</option><option value="ethiopian" ${f.calendar==='ethiopian'?'selected':''}>Ethiopian 🇪🇹</option></select></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Date Format</label><select onchange="updateProp('${f.id}','format',this.value)"><option value="YYYY-MM-DD" ${f.format==='YYYY-MM-DD'?'selected':''}>YYYY-MM-DD</option><option value="DD-MM-YYYY" ${f.format==='DD-MM-YYYY'?'selected':''}>DD-MM-YYYY</option></select></div>`;
+                h += `<div class="prop-group"><label class="pg-title">Validation</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.noFuture?'checked':''} onchange="updateProp('${f.id}','noFuture',this.checked)" style="width:auto"> Disable Future Dates</label></div>`;
             }
 
             if(f.type==='child_entry') {
@@ -704,49 +756,94 @@
             c.innerHTML = h;
         }
 
-        // Preview Render Logic
+        // ================= PREVIEW ENGINE =================
         let globalPreviewNum = 1;
+
+        function shuffleArray(arr) {
+            let a = [...arr];
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
 
         function getPreviewInputHTML(f) {
             if (f.type === 'text') return `<input type="text" class="preview-input" placeholder="${f.placeholder||''}">`;
             if (f.type === 'number') return `<input type="number" class="preview-input" placeholder="${f.placeholder||''}">`;
             if (f.type === 'textarea') return `<textarea class="preview-input" rows="${f.rows||3}" placeholder="${f.placeholder||''}"></textarea>`;
-            if (f.type === 'select') return `<select class="preview-input"><option value="">${f.placeholder||'Select...'}</option>${(f.options||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
-            if (f.type === 'radio') return `<div class="preview-options">${(f.options||[]).map(o=>`<label><input type="radio" name="preview_${f.id}"> ${o}</label>`).join('')}</div>`;
-            if (f.type === 'checkbox') return `<div class="preview-options">${(f.options||[]).map(o=>`<label><input type="checkbox"> ${o}</label>`).join('')}</div>`;
-            if (f.type === 'date') return f.calendar==='ethiopian' ? `<div class="preview-mock-input" style="background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;border:none">🇪🇹 Ethiopian Date Picker</div>` : `<input type="date" class="preview-input">`;
-            if (f.type === 'rating') return `<div class="preview-mock-input" style="color:var(--primary);font-size:16px;letter-spacing:4px">⭐⭐⭐⭐⭐</div>`;
-            if (['photo', 'document', 'sound', 'video', 'barcode'].includes(f.type)) return `<div class="preview-mock-input">Click to capture/upload [${f.type.toUpperCase()}]</div>`;
             
-            return `<div class="preview-mock-input">[ ${f.type.toUpperCase()} FIELD ]</div>`;
+            if (f.type === 'select') return `<select class="preview-input"><option value="">${f.placeholder||'Select...'}</option>${(f.options||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
+            
+            if (['radio', 'checkbox'].includes(f.type)) {
+                let opts = f.shuffle ? shuffleArray(f.options || []) : (f.options || []);
+                let inputType = f.type === 'radio' ? 'radio' : 'checkbox';
+                let nameAttr = f.type === 'radio' ? `name="preview_${f.id}"` : '';
+                return `<div class="preview-options">${opts.map(o=>`<label><input type="${inputType}" ${nameAttr}> ${o}</label>`).join('')}</div>`;
+            }
+
+            if (f.type === 'date') {
+                if(f.calendar==='ethiopian') return `<div class="preview-input" style="background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;border:none;text-align:center;font-weight:bold;cursor:pointer">🇪🇹 Select Ethiopian Date</div>`;
+                let maxAttr = f.noFuture ? `max="${new Date().toISOString().split('T')[0]}"` : '';
+                return `<input type="date" class="preview-input" ${maxAttr}>`;
+            }
+            
+            if (f.type === 'time') return `<input type="time" class="preview-input" step="1">`;
+            
+            if (f.type === 'rating') return `<div class="preview-input" style="color:var(--primary);font-size:22px;letter-spacing:4px;background:transparent;border:none;padding:0;margin-top:10px;cursor:pointer">⭐⭐⭐⭐⭐</div>`;
+            
+            if (f.type === 'gps') {
+                return `<div style="display:flex;gap:10px;margin-top:6px flex-wrap:wrap">
+                            <button class="preview-media-btn" style="flex:1;min-width:180px"><svg class="icon"><use href="#ic-gps"/></svg> 📍 Detect Current Location</button>
+                            <input type="text" class="preview-input" style="flex:1;min-width:180px;margin-top:0" placeholder="Or enter manual coordinates">
+                        </div>`;
+            }
+
+            if (['photo', 'document', 'sound', 'video', 'barcode'].includes(f.type)) {
+                let capTxt = f.type==='photo'?'📷 Take Photo':f.type==='video'?'🎥 Record Video':f.type==='sound'?'🎙️ Record Audio':f.type==='barcode'?'🔍 Scan Code':'📄 Scan Document';
+                return `<div class="preview-media-grid">
+                            <button class="preview-media-btn">${capTxt}</button>
+                            <button class="preview-media-btn" style="border-style:solid;background:transparent;color:var(--text)">📁 Upload File</button>
+                        </div>`;
+            }
+
+            if (f.type === 'table') {
+                let cols = f.columns || [{name:'Col 1'}, {name:'Col 2'}];
+                let ths = cols.map(c => `<th>${c.name}</th>`).join('');
+                let trs = Array.from({length: f.rows||2}).map(() => `<tr>${cols.map(()=>`<td><input type="text" placeholder="..."></td>`).join('')}</tr>`).join('');
+                return `<div style="overflow-x:auto"><table class="preview-table"><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table></div>`;
+            }
+
+            if (f.type === 'cascade') {
+                let levels = f.levels || [{name:'Level 1'}, {name:'Level 2'}];
+                return `<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">` + 
+                       levels.map(l => `<select class="preview-input" style="margin-top:0"><option>Select ${l.name}...</option></select>`).join('') + `</div>`;
+            }
+            
+            return `<div class="preview-input" style="text-align:center;color:var(--text-muted)">[ ${f.type.toUpperCase()} FIELD ]</div>`;
         }
 
         function renderPreviewNode(f, isRoot) {
             let html = '';
             let isContainer = ['group', 'repeat', 'child_entry'].includes(f.type);
-            let numText = '';
-            
-            // Generate auto-number text specifically on the Question Label
-            if (!isContainer && autoNumber) {
-                numText = `${globalPreviewNum}. `;
-                globalPreviewNum++;
-            }
+            let numText = (!isContainer && autoNumber) ? `${globalPreviewNum++}. ` : '';
 
-            html += `<div style="margin-bottom: 20px;">
-                <div class="preview-label">${numText}${f.label}${f.required?' <span style="color:red">*</span>':''}</div>`;
+            html += `<div style="margin-bottom: ${isRoot ? '0' : '20px'};">
+                <div class="preview-label">${numText}${f.label}${f.required?' <span style="color:var(--danger)">*</span>':''}</div>`;
             
             if(f.showHint !== false && f.hint) {
                 html += `<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">💡 ${f.hint}</div>`;
             }
 
             if(isContainer) {
-                html += `<div style="padding-left: 14px; border-left: 2px solid var(--border-light); margin-top: 14px;">`;
+                html += `<div class="preview-container-box">`;
                 if (f.children && f.children.length) {
-                    f.children.forEach(child => {
-                        html += renderPreviewNode(child, false);
-                    });
+                    f.children.forEach(child => { html += renderPreviewNode(child, false); });
                 } else {
-                    html += `<div style="font-size:11px; color:var(--text-muted); font-style:italic">Empty container...</div>`;
+                    html += `<div style="font-size:11px; color:var(--text-muted); font-style:italic;text-align:center">Empty container...</div>`;
+                }
+                if(['repeat', 'child_entry'].includes(f.type)) {
+                    html += `<button class="add-entry-btn">+ Add New Entry</button>`;
                 }
                 html += `</div>`;
             } else {
@@ -756,41 +853,77 @@
             return html;
         }
 
+        function buildPreviewHeader() {
+            const title = document.getElementById('formTitle').value || 'Untitled Form';
+            const desc = document.getElementById('formDescription').value || 'Please fill out the form below.';
+            const iconHTML = getFormIcon() || `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+            return `<div class="preview-header-icon">${iconHTML}</div>
+                    <div class="preview-header-content"><h1>${title}</h1><p>${desc}</p></div>`;
+        }
+
         function renderPreviewContent() {
+            document.getElementById('previewHeaderBlock').innerHTML = buildPreviewHeader();
+            
             const ct = document.getElementById('previewContent');
-            if(formFields.length===0) { ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px">No fields to preview</p>'; return; }
+            if(formFields.length===0) { ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px">No fields to preview.</p>'; return; }
             
             globalPreviewNum = 1;
             
             ct.innerHTML = formFields.map((f,i)=>{
-                return `<div class="preview-step ${i===0?'active':''}"><div style="padding:20px;background:var(--bg-secondary);border-radius:8px;margin-bottom:8px">${renderPreviewNode(f, true)}</div></div>`;
+                return `<div class="preview-step ${i===0?'active':''}" style="margin-bottom:24px">${renderPreviewNode(f, true)}</div>`;
             }).join('');
         }
         
-        function previewForm() { renderPreviewContent(); document.getElementById('previewNav').style.display = formFields.length?'flex':'none'; previewStep=0; updatePreviewSteps(); document.getElementById('previewModal').style.display='flex'; }
+        function previewForm() { 
+            renderPreviewContent(); 
+            document.getElementById('previewNav').style.display = formFields.length?'flex':'none'; 
+            previewStep = 0; 
+            updatePreviewSteps(); 
+            document.getElementById('previewModal').style.display = 'flex'; 
+        }
+        
         function nextStep() { if(previewStep<formFields.length-1) { previewStep++; updatePreviewSteps(); } }
         function prevStep() { if(previewStep>0) { previewStep--; updatePreviewSteps(); } }
-        function updatePreviewSteps() { document.querySelectorAll('.preview-step').forEach((e,i)=>e.classList.toggle('active',i===previewStep)); updateStepIndicator(); }
-        function updateStepIndicator() { document.getElementById('stepIndicator').innerHTML = formFields.map((_,i)=>`<div class="step-dot ${i===previewStep?'active':''}"></div>`).join(''); }
+        
+        function updatePreviewSteps() { 
+            document.querySelectorAll('.preview-step').forEach((e,i)=>e.classList.toggle('active',i===previewStep)); 
+            document.getElementById('stepIndicator').innerHTML = formFields.map((_,i)=>`<div class="step-dot ${i===previewStep?'active':''}"></div>`).join(''); 
+            
+            const isLast = previewStep === formFields.length - 1;
+            document.getElementById('previewNextBtn').style.display = isLast ? 'none' : 'block';
+            document.getElementById('previewSubmitContainer').style.display = isLast ? 'flex' : 'none';
+        }
+        
         function closePreview() { document.getElementById('previewModal').style.display='none'; }
 
+        // Utilities
         function editTable(id) { const f=findFieldById(formFields,id); if(!f)return; const c=prompt('Columns:',f.columns?.length||2); const r=prompt('Rows:',f.rows||2); if(c&&r){f.columns=Array(parseInt(c)).fill(0).map((_,i)=>({name:`Col ${i+1}`,type:'text'}));f.rows=parseInt(r);renderCanvas();selectField(id)} }
         function importCSV(id) { const f=findFieldById(formFields,id); if(!f)return; const inp=prompt('Paste CSV values (comma-separated):\n\nFor cascade:\nLevel1: A,B,C\nLevel2: A1,A2,B1',''); if(!inp)return; const lines=inp.split('\n').filter(l=>l.trim()); if(f.type==='cascade'&&lines.some(l=>l.toLowerCase().startsWith('level'))){const lvls=[];lines.forEach(l=>{const m=l.match(/^(Level\s*\d+)?:?\s*(.+)$/i);if(m){const nm=m[1]||`Level ${lvls.length+1}`;const ops=m[2].split(',').map(o=>o.trim()).filter(o=>o);if(ops.length)lvls.push({name:nm,options:ops})}});if(lvls.length>=2)f.levels=lvls;else alert('Need 2+ levels')}else if(f.options){const ops=[];lines.forEach(l=>{l.split(',').forEach(o=>{const t=o.trim();if(t)ops.push(t)})});if(ops.length)f.options=ops}renderCanvas();selectField(id)}
 
         function saveForm() {
-            const config={title:document.getElementById('formTitle').value||'Untitled',description:document.getElementById('formDescription').value,icon:getFormIcon(),fields:formFields,autoNumber,version:'5.0'};
+            const config={title:document.getElementById('formTitle').value||'Untitled',description:document.getElementById('formDescription').value,icon:getFormIcon(),fields:formFields,autoNumber,version:'6.0'};
             const saved=JSON.parse(localStorage.getItem('fbForms')||'[]');saved.push(config);localStorage.setItem('fbForms',JSON.stringify(saved));alert('✅ Saved!');
         }
         function exportJSON() {
-            const config={title:document.getElementById('formTitle').value||'Untitled',description:document.getElementById('formDescription').value,icon:getFormIcon(),fields:formFields,autoNumber,version:'5.0'};
+            const config={title:document.getElementById('formTitle').value||'Untitled',description:document.getElementById('formDescription').value,icon:getFormIcon(),fields:formFields,autoNumber,version:'6.0'};
             const json=JSON.stringify(config,null,2);
             const m=document.createElement('div');m.className='modal-overlay';
-            m.innerHTML=`<div class="modal" style="width:650px"><h2>Export JSON</h2><pre style="background:var(--bg-secondary);padding:14px;border-radius:6px;max-height:400px;overflow:auto;font-size:11px">${json.replace(/</g,'&lt;')}</pre><div class="modal-actions"><button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText(this.dataset.j);this.textContent='Copied!'" data-j="${json.replace(/"/g,'&quot;')}">Copy</button><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Close</button></div></div>`;
+            m.innerHTML=`<div class="modal" style="width:650px; border-radius:var(--radius-lg); background:var(--surface)">
+                <div class="modal-inner">
+                    <h2>Export JSON</h2>
+                    <pre style="background:var(--bg-secondary);padding:14px;border-radius:6px;max-height:400px;overflow:auto;font-size:11px;color:var(--text)">${json.replace(/</g,'&lt;')}</pre>
+                    <div class="modal-actions"><button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText(this.dataset.j);this.textContent='Copied!'" data-j="${json.replace(/"/g,'&quot;')}">Copy</button><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Close</button></div>
+                </div></div>`;
             document.body.appendChild(m);
         }
         function importJSON() {
             const m=document.createElement('div');m.className='modal-overlay';
-            m.innerHTML=`<div class="modal" style="width:550px"><h2>Import JSON</h2><textarea id="importText" style="width:100%;height:280px;padding:10px;border:2px solid var(--border-light);border-radius:6px;background:var(--bg-secondary);color:var(--text);font-family:monospace;font-size:12px"></textarea><div class="modal-actions"><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Cancel</button><button class="btn btn-primary btn-sm" onclick="doImport()">Import</button></div></div>`;
+            m.innerHTML=`<div class="modal" style="width:550px; background:var(--surface); border-radius:var(--radius-lg)">
+                <div class="modal-inner">
+                    <h2>Import JSON</h2>
+                    <textarea id="importText" style="width:100%;height:280px;padding:10px;border:2px solid var(--border-light);border-radius:6px;background:var(--bg-secondary);color:var(--text);font-family:monospace;font-size:12px;outline:none"></textarea>
+                    <div class="modal-actions"><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Cancel</button><button class="btn btn-primary btn-sm" onclick="doImport()">Import</button></div>
+                </div></div>`;
             document.body.appendChild(m);
         }
         function doImport() {
