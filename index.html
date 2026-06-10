@@ -81,12 +81,22 @@
         .modal{background:var(--surface);border-radius:var(--radius-lg);padding:22px;max-width:90%;max-height:90%;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.5);border:1px solid var(--border)}
         .modal h2{font-size:16px;font-weight:700;color:var(--primary);margin-bottom:14px}
         .modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
+        
+        /* Preview Modal Specifics */
         .preview-step{display:none;animation:fadeIn 0.25s ease}.preview-step.active{display:block}
         @keyframes fadeIn{from{opacity:0;transform:translateX(15px)}to{opacity:1;transform:translateX(0)}}
         .preview-nav{display:flex;justify-content:space-between;align-items:center;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
         .step-indicator{display:flex;gap:5px}.step-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}.step-dot.active{background:var(--primary);width:20px;border-radius:4px}
         .ethiopian-date-badge{display:inline-block;background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:600}
         .required-star{color:var(--danger);font-weight:700}
+        
+        .preview-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; background: var(--bg); color: var(--text); font-family: inherit; font-size: 13px; margin-top: 6px; outline: none; transition: var(--transition); }
+        .preview-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(249,115,22,0.1); }
+        .preview-options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+        .preview-options label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--text); }
+        .preview-options input[type="radio"], .preview-options input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
+        .preview-mock-input { padding: 12px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-light); border-radius: 6px; text-align: center; color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+        .preview-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); }
     </style>
 </head>
 <body class="dark-mode">
@@ -187,10 +197,6 @@
                         <label class="toggle"><input type="checkbox" id="autoNumberToggle" checked onchange="toggleAutoNumber()"><span class="toggle-slider"></span></label>
                         <span>Auto-number in Form</span>
                     </div>
-                    <div class="toggle-group">
-                        <label class="toggle"><input type="checkbox" id="hintsToggle" checked onchange="toggleHints()"><span class="toggle-slider"></span></label>
-                        <span>Show Hints in Builder</span>
-                    </div>
                 </div>
                 <div class="canvas-body" id="canvasBody">
                     <div class="empty-state" id="emptyState">
@@ -221,7 +227,7 @@
     </div>
 
     <div class="modal-overlay" id="previewModal" style="display:none">
-        <div class="modal" style="width:480px">
+        <div class="modal" style="width:550px">
             <h2><svg class="icon icon-lg"><use href="#ic-eye"/></svg> Preview</h2>
             <div id="previewContent"></div>
             <div class="preview-nav" id="previewNav" style="display:none">
@@ -252,36 +258,35 @@
 
         // State
         let formFields=[],selectedFieldId=null,fieldIdCounter=0,autoNumber=true;
-        let tempSkipLogic=null,currentFieldForLogic=null,previewStep=0,hintsVisible=true;
+        let tempSkipLogic=null,currentFieldForLogic=null,previewStep=0;
         let collapsedGroups={};
 
         const fieldDefaults={
-            text:{label:'Text Field',placeholder:'Type answer...',hint:'Short answer',required:false,minLength:'',maxLength:'',regex:'',skipLogic:null},
-            textarea:{label:'Paragraph',placeholder:'Type details...',hint:'Long answer',required:false,rows:3,minLength:'',maxLength:'',regex:'',skipLogic:null},
-            number:{label:'Number',placeholder:'Enter number...',hint:'Numeric value',required:false,min:'',max:'',maxDigits:'',allowDecimal:false,skipLogic:null},
-            select:{label:'Choose',placeholder:'Select...',hint:'Pick one option',required:false,options:['Option 1','Option 2','Option 3'],skipLogic:null},
-            radio:{label:'Pick one',hint:'Single choice',required:false,options:['Choice A','Choice B','Choice C'],skipLogic:null},
-            checkbox:{label:'Check all that apply',hint:'Multiple choices',required:false,options:['Item 1','Item 2','Item 3'],skipLogic:null},
-            date:{label:'Date',hint:'Select date',required:false,calendar:'gregorian',skipLogic:null},
-            gps:{label:'Location',hint:'GPS coordinates',required:false,skipLogic:null},
-            photo:{label:'Photo',hint:'Take picture',required:false,skipLogic:null},
-            sound:{label:'Audio',hint:'Record audio',required:false,maxDuration:120,skipLogic:null},
-            video:{label:'Video',hint:'Record video',required:false,maxDuration:60,skipLogic:null},
-            rating:{label:'Rating',hint:'Rate 1-5',required:false,maxStars:5,skipLogic:null},
-            barcode:{label:'Scan',hint:'Scan code',required:false,skipLogic:null},
-            document:{label:'Document',hint:'Upload file',required:false,allowedTypes:['pdf','doc','docx','jpg','png'],skipLogic:null},
-            child_entry:{label:'Child Entry',hint:'Repeat for each member',required:false,prefix:'AA/WO/07/01/',startNumber:1,digitPadding:0,children:[],skipLogic:null},
-            group:{label:'Group',hint:'Related fields',children:[],skipLogic:null},
-            repeat:{label:'Repeat Group',hint:'Repeatable',children:[],skipLogic:null},
-            table:{label:'Table',hint:'Grid data',columns:[{name:'Col 1',type:'text'},{name:'Col 2',type:'text'}],rows:2,skipLogic:null},
-            cascade:{label:'Cascade',hint:'Linked selects',required:false,levels:[{name:'Level 1',options:['A','B','C']},{name:'Level 2',options:['A1','A2','B1']}],skipLogic:null}
+            text:{label:'Text Field',placeholder:'Type answer...',hint:'Short answer',showHint:true,required:false,minLength:'',maxLength:'',regex:'',skipLogic:null},
+            textarea:{label:'Paragraph',placeholder:'Type details...',hint:'Long answer',showHint:true,required:false,rows:3,minLength:'',maxLength:'',regex:'',skipLogic:null},
+            number:{label:'Number',placeholder:'Enter number...',hint:'Numeric value',showHint:true,required:false,min:'',max:'',maxDigits:'',allowDecimal:false,skipLogic:null},
+            select:{label:'Choose',placeholder:'Select...',hint:'Pick one option',showHint:true,required:false,options:['Option 1','Option 2','Option 3'],skipLogic:null},
+            radio:{label:'Pick one',hint:'Single choice',showHint:true,required:false,options:['Choice A','Choice B','Choice C'],skipLogic:null},
+            checkbox:{label:'Check all that apply',hint:'Multiple choices',showHint:true,required:false,options:['Item 1','Item 2','Item 3'],skipLogic:null},
+            date:{label:'Date',hint:'Select date',showHint:true,required:false,calendar:'gregorian',skipLogic:null},
+            gps:{label:'Location',hint:'GPS coordinates',showHint:true,required:false,skipLogic:null},
+            photo:{label:'Photo',hint:'Take picture',showHint:true,required:false,skipLogic:null},
+            sound:{label:'Audio',hint:'Record audio',showHint:true,required:false,maxDuration:120,skipLogic:null},
+            video:{label:'Video',hint:'Record video',showHint:true,required:false,maxDuration:60,skipLogic:null},
+            rating:{label:'Rating',hint:'Rate 1-5',showHint:true,required:false,maxStars:5,skipLogic:null},
+            barcode:{label:'Scan',hint:'Scan code',showHint:true,required:false,skipLogic:null},
+            document:{label:'Document',hint:'Upload file',showHint:true,required:false,allowedTypes:['pdf','doc','docx','jpg','png'],skipLogic:null},
+            child_entry:{label:'Child Entry',hint:'Repeat for each member',showHint:true,required:false,prefix:'AA/WO/07/01/',startNumber:1,digitPadding:0,children:[],skipLogic:null},
+            group:{label:'Group',hint:'Related fields',showHint:true,children:[],skipLogic:null},
+            repeat:{label:'Repeat Group',hint:'Repeatable',showHint:true,children:[],skipLogic:null},
+            table:{label:'Table',hint:'Grid data',showHint:true,columns:[{name:'Col 1',type:'text'},{name:'Col 2',type:'text'}],rows:2,skipLogic:null},
+            cascade:{label:'Cascade',hint:'Linked selects',showHint:true,required:false,levels:[{name:'Level 1',options:['A','B','C']},{name:'Level 2',options:['A1','A2','B1']}],skipLogic:null}
         };
 
         function icon(id,s=''){return`<svg class="icon${s?' icon-'+s:''}"><use href="#ic-${id}"/></svg>`}
         function fIcon(t){const m={text:'text',textarea:'textarea',number:'number',date:'date',select:'select',radio:'radio',checkbox:'checkbox',rating:'star',cascade:'cascade',photo:'camera',sound:'mic',video:'video',gps:'gps',barcode:'scan',document:'document',child_entry:'child',group:'folder',repeat:'repeat',table:'grid'};return icon(m[t]||'settings')}
 
         function toggleAutoNumber(){autoNumber=document.getElementById('autoNumberToggle').checked;renderCanvas()}
-        function toggleHints(){hintsVisible=document.getElementById('hintsToggle').checked;renderCanvas()}
 
         // Helper: find field by ID in nested structure
         function findFieldById(fields, id) {
@@ -311,7 +316,7 @@
             return removeFromList(formFields);
         }
 
-        // ============ UPGRADED DRAG & DROP ============
+        // ============ DRAG & DROP ============
         const canvasContainer = document.getElementById('canvasContainer');
         const canvasBody = document.getElementById('canvasBody');
         const emptyState = document.getElementById('emptyState');
@@ -482,7 +487,7 @@
         function renderField(f,i,parentId) {
             const sel = f.id === selectedFieldId;
             const hasSkip = f.skipLogic && f.skipLogic.conditions?.length > 0;
-            const num = i + 1; // Always calculate number for builder index
+            const num = i + 1; // Persistent builder index
             const colors = ['#F97316','#FB923C','#FDBA74','#EA580C','#C2410C'];
             const color = colors[i%5];
             const isCollapsed = collapsedGroups[f.id] === true;
@@ -520,7 +525,7 @@
                     <div class="field-row">
                         <label>${f.label}${f.required?' <span class="required-star">*</span>':''}</label>
                         <input value="${f.label}" onchange="updateProp('${f.id}','label',this.value)" onclick="event.stopPropagation()">
-                        <span class="hint-text" style="${hintsVisible ? '' : 'display:none'}">💡 ${f.hint||''}</span>
+                        <span class="hint-text" style="${f.showHint !== false ? '' : 'display:none'}">💡 ${f.hint||''}</span>
                     </div>
                     ${renderFieldSpecific(f)}
                 </div>
@@ -644,10 +649,7 @@
         
         function updateProp(id, prop, val) { 
             const f = findFieldById(formFields, id); 
-            if(f) { 
-                f[prop] = val; 
-                // Notice we don't automatically renderCanvas here to avoid losing focus while typing inside properties panel
-            } 
+            if(f) f[prop] = val; 
         }
 
         function addOption(id) { const f = findFieldById(formFields,id); if(f?.options) { f.options.push(`Option ${f.options.length+1}`); renderCanvas(); } }
@@ -662,6 +664,7 @@
             let h = `<div class="prop-group"><label class="pg-title">Field Type</label><input type="text" value="${f.type.toUpperCase()}" readonly style="background:var(--bg-tertiary);border-color:var(--border);color:var(--text-muted)"></div>`;
             
             // Universal Properties
+            h += `<div class="prop-group"><label class="pg-title">Show Hint</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.showHint !== false ? 'checked' : ''} onchange="updateProp('${f.id}','showHint',this.checked);renderCanvas()" style="width:auto"> Display hint in builder</label></div>`;
             h += `<div class="prop-group"><label class="pg-title">Required</label><label style="display:flex;align-items:center;gap:5px;font-size:12px;cursor:pointer"><input type="checkbox" ${f.required?'checked':''} onchange="updateProp('${f.id}','required',this.checked);renderCanvas()" style="width:auto"> Make this field required</label></div>`;
             h += `<div class="prop-group"><label class="pg-title">Question Label</label><input type="text" value="${f.label||''}" onchange="updateProp('${f.id}','label',this.value);renderCanvas()"></div>`;
             h += `<div class="prop-group"><label class="pg-title">Hint / Subtitle</label><input type="text" value="${f.hint||''}" onchange="updateProp('${f.id}','hint',this.value);renderCanvas()"></div>`;
@@ -701,23 +704,67 @@
             c.innerHTML = h;
         }
 
-        // Preview rendering
-        function renderPreviewContent() {
-            const s = formFields, ct = document.getElementById('previewContent');
-            if(s.length===0) { ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px">No fields</p>'; return; }
-            ct.innerHTML = s.map((f,i)=>{
-                // Incorporate autoNumber state into the visual text rendering
-                const numText = autoNumber ? (i + 1) + '. ' : '';
-                let h = `<div class="preview-step ${i===0?'active':''}"><div style="padding:14px;background:var(--bg-secondary);border-radius:8px;margin-bottom:8px"><strong>${numText}${f.label}${f.required?' <span style="color:red">*</span>':''}</strong>`;
-                
-                // Hide or show hints entirely based on hintsVisible flag (now located in builder toggle)
-                if(hintsVisible && f.hint) h += `<div style="font-size:10px;color:var(--text-muted);margin-bottom:4px">💡 ${f.hint}</div>`;
-                
-                if(f.type==='date'&&f.calendar==='ethiopian') {
-                    h += '<div style="margin-top:8px;padding:8px;background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;border-radius:6px;text-align:center">🇪🇹 Ethiopian Date Picker</div>';
+        // Preview Render Logic
+        let globalPreviewNum = 1;
+
+        function getPreviewInputHTML(f) {
+            if (f.type === 'text') return `<input type="text" class="preview-input" placeholder="${f.placeholder||''}">`;
+            if (f.type === 'number') return `<input type="number" class="preview-input" placeholder="${f.placeholder||''}">`;
+            if (f.type === 'textarea') return `<textarea class="preview-input" rows="${f.rows||3}" placeholder="${f.placeholder||''}"></textarea>`;
+            if (f.type === 'select') return `<select class="preview-input"><option value="">${f.placeholder||'Select...'}</option>${(f.options||[]).map(o=>`<option>${o}</option>`).join('')}</select>`;
+            if (f.type === 'radio') return `<div class="preview-options">${(f.options||[]).map(o=>`<label><input type="radio" name="preview_${f.id}"> ${o}</label>`).join('')}</div>`;
+            if (f.type === 'checkbox') return `<div class="preview-options">${(f.options||[]).map(o=>`<label><input type="checkbox"> ${o}</label>`).join('')}</div>`;
+            if (f.type === 'date') return f.calendar==='ethiopian' ? `<div class="preview-mock-input" style="background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;border:none">🇪🇹 Ethiopian Date Picker</div>` : `<input type="date" class="preview-input">`;
+            if (f.type === 'rating') return `<div class="preview-mock-input" style="color:var(--primary);font-size:16px;letter-spacing:4px">⭐⭐⭐⭐⭐</div>`;
+            if (['photo', 'document', 'sound', 'video', 'barcode'].includes(f.type)) return `<div class="preview-mock-input">Click to capture/upload [${f.type.toUpperCase()}]</div>`;
+            
+            return `<div class="preview-mock-input">[ ${f.type.toUpperCase()} FIELD ]</div>`;
+        }
+
+        function renderPreviewNode(f, isRoot) {
+            let html = '';
+            let isContainer = ['group', 'repeat', 'child_entry'].includes(f.type);
+            let numText = '';
+            
+            // Generate auto-number text specifically on the Question Label
+            if (!isContainer && autoNumber) {
+                numText = `${globalPreviewNum}. `;
+                globalPreviewNum++;
+            }
+
+            html += `<div style="margin-bottom: 20px;">
+                <div class="preview-label">${numText}${f.label}${f.required?' <span style="color:red">*</span>':''}</div>`;
+            
+            if(f.showHint !== false && f.hint) {
+                html += `<div style="font-size:11px;color:var(--text-muted);margin-bottom:8px">💡 ${f.hint}</div>`;
+            }
+
+            if(isContainer) {
+                html += `<div style="padding-left: 14px; border-left: 2px solid var(--border-light); margin-top: 14px;">`;
+                if (f.children && f.children.length) {
+                    f.children.forEach(child => {
+                        html += renderPreviewNode(child, false);
+                    });
+                } else {
+                    html += `<div style="font-size:11px; color:var(--text-muted); font-style:italic">Empty container...</div>`;
                 }
-                
-                return h + '</div></div>'}).join('');
+                html += `</div>`;
+            } else {
+                html += getPreviewInputHTML(f);
+            }
+            html += `</div>`;
+            return html;
+        }
+
+        function renderPreviewContent() {
+            const ct = document.getElementById('previewContent');
+            if(formFields.length===0) { ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:30px">No fields to preview</p>'; return; }
+            
+            globalPreviewNum = 1;
+            
+            ct.innerHTML = formFields.map((f,i)=>{
+                return `<div class="preview-step ${i===0?'active':''}"><div style="padding:20px;background:var(--bg-secondary);border-radius:8px;margin-bottom:8px">${renderPreviewNode(f, true)}</div></div>`;
+            }).join('');
         }
         
         function previewForm() { renderPreviewContent(); document.getElementById('previewNav').style.display = formFields.length?'flex':'none'; previewStep=0; updatePreviewSteps(); document.getElementById('previewModal').style.display='flex'; }
