@@ -18,6 +18,20 @@
             --surface: #FFFFFF; --border: #CBD5E1; --border-light: #E2E8F0;
             --text: #1E293B; --text-secondary: #475569; --text-muted: #94A3B8;
         }
+        body.light-blue-mode {
+            --primary: #0284C7; --primary-dark: #0369A1; --primary-glow: rgba(2,132,199,0.35);
+            --secondary: #38BDF8; --accent: #7DD3FC; --danger: #EF4444; --warning: #F59E0B; --unique: #8B5CF6;
+            --bg: #F0F9FF; --bg-secondary: #E0F2FE; --bg-tertiary: #BAE6FD;
+            --surface: #FFFFFF; --border: #BAE6FD; --border-light: #E0F2FE;
+            --text: #0C4A6E; --text-secondary: #0369A1; --text-muted: #475569;
+        }
+        body.light-green-mode {
+            --primary: #16A34A; --primary-dark: #15803D; --primary-glow: rgba(22,163,74,0.35);
+            --secondary: #4ADE80; --accent: #86EFAC; --danger: #EF4444; --warning: #F59E0B; --unique: #8B5CF6;
+            --bg: #F0FDF4; --bg-secondary: #DCFCE7; --bg-tertiary: #BBF7D0;
+            --surface: #FFFFFF; --border: #BBF7D0; --border-light: #DCFCE7;
+            --text: #14532D; --text-secondary: #166534; --text-muted: #475569;
+        }
         *{margin:0;padding:0;box-sizing:border-box}
         body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;transition:background 0.3s,color 0.3s}
         ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg-secondary)}::-webkit-scrollbar-thumb{background:var(--primary-dark);border-radius:3px}
@@ -34,12 +48,27 @@
         .btn-sm{padding:5px 10px;font-size:11px}
         .main-container{display:flex;height:calc(100vh - 52px)}
         .sidebar{width:280px;background:var(--surface);border-right:1px solid var(--border);padding:14px;overflow-y:auto;flex-shrink:0}
-        .sidebar-section{margin-bottom:18px}.sidebar h3{font-size:10px;text-transform:uppercase;color:var(--primary);margin-bottom:8px;letter-spacing:1.2px;font-weight:700;border-bottom:1px solid rgba(249,115,22,0.2);padding-bottom:5px}
+        .sidebar-section{margin-bottom:18px}.sidebar h3{font-size:10px;text-transform:uppercase;color:var(--primary);margin-bottom:8px;letter-spacing:1.2px;font-weight:700;border-bottom:1px solid var(--border-light);padding-bottom:5px}
         .field-types{display:flex;flex-direction:column;gap:5px}
-        .field-type-item{padding:9px 10px;border:2px solid var(--border-light);border-radius:6px;cursor:grab;transition:var(--transition);display:flex;align-items:center;gap:9px;background:var(--bg-tertiary);font-size:12px}
-        .field-type-item:hover{border-color:var(--primary);background:rgba(249,115,22,0.08);transform:translateX(3px);box-shadow:0 0 14px rgba(249,115,22,0.12)}.field-type-item:active{cursor:grabbing;transform:scale(0.97)}.field-type-item.dragging{opacity:0.5;transform:scale(0.95)}
-        .field-type-icon{width:32px;height:32px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(249,115,22,0.18),rgba(234,88,12,0.18));border-radius:5px;color:var(--primary);border:1px solid rgba(249,115,22,0.25)}
-        .field-type-name{font-weight:600;font-size:12px;color:var(--text)}.field-type-desc{font-size:9px;color:var(--text-muted)}
+        
+        /* Modern Type Box Setup */
+        .field-type-item {
+            padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 10px; cursor: grab;
+            transition: var(--transition); display: flex; align-items: center; gap: 12px;
+            background: var(--surface); box-shadow: 0 2px 4px rgba(0,0,0,0.03); margin-bottom: 2px;
+        }
+        .field-type-item:hover {
+            border-color: var(--primary); background: var(--bg-tertiary); transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        }
+        .field-type-item:active{cursor:grabbing;transform:scale(0.97)}.field-type-item.dragging{opacity:0.5;transform:scale(0.95)}
+        .field-type-icon {
+            width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+            background: var(--bg-secondary); border-radius: 8px; color: var(--primary); border: 1px solid var(--border-light);
+        }
+        .field-type-name { font-weight: 600; font-size: 12px; color: var(--text); margin-bottom: 2px; }
+        .field-type-desc { font-size: 10px; color: var(--text-muted); }
+        
         .canvas-container{flex:1;overflow-y:auto;padding:18px;background:linear-gradient(135deg,var(--bg),var(--bg-secondary));transition:background 0.3s;position:relative}
         .canvas-container.drag-over{outline:3px dashed var(--primary)!important;outline-offset:-6px;background:rgba(249,115,22,0.04)}
         .canvas{max-width:750px;margin:0 auto;background:var(--surface);border-radius:var(--radius-lg);box-shadow:0 8px 32px rgba(0,0,0,0.4);border:1px solid var(--border);min-height:300px}
@@ -61,17 +90,16 @@
         .field-number{position:absolute;top:-9px;left:-9px;width:24px;height:24px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;z-index:1;box-shadow:0 0 8px var(--primary-glow)}
         .field-item-header{display:flex;align-items:center;gap:7px;margin-bottom:10px;margin-left:18px}
         .field-badge{padding:2px 8px;border-radius:16px;font-size:9px;font-weight:700;text-transform:uppercase;display:flex;align-items:center;gap:3px}.field-badge-type{background:var(--primary);color:#fff}
-        .field-badge-skip{background:var(--warning-light);color:#92400E;display:none}.field-item.has-skip .field-badge-skip{display:flex}
+        .field-badge-skip{background:var(--warning);color:#fff;display:none}.field-item.has-skip .field-badge-skip{display:flex}
         .field-badge-unique{background:var(--unique);color:#fff;display:none}.field-item.is-unique .field-badge-unique{display:flex}
         .field-item-actions{margin-left:auto;display:flex;gap:3px}
         .field-btn{background:transparent;border:1px solid transparent;cursor:pointer;padding:5px;border-radius:4px;color:var(--text-muted);transition:var(--transition);display:flex}
         .field-btn:hover{background:rgba(249,115,22,0.12);border-color:var(--primary);color:var(--primary)}.field-btn.delete:hover{background:rgba(239,68,68,0.12);border-color:var(--danger);color:var(--danger)}
         .field-body{display:grid;gap:8px;margin-left:18px; transition: var(--transition);}
         .field-row{display:flex;flex-direction:column;gap:3px}.field-row label{font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.4px}
-        .field-row input[type="text"], .field-row input[type="number"], .field-row select, .field-row textarea{padding:7px 9px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;outline:none;background:var(--bg-secondary);color:var(--text);transition:var(--transition);font-family:inherit}
+        .field-row input[type="text"], .field-row input[type="number"], .field-row select, .field-row textarea{padding:7px 9px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;outline:none;background:var(--bg-secondary);color:var(--text);transition:var(--transition);font-family:inherit;width:100%;box-sizing:border-box;}
         .field-row input:focus,.field-row select:focus, .field-row textarea:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(249,115,22,0.1)}
         .hint-text{font-size:9px;color:var(--text-muted);font-style:italic}
-        .mock-input { padding:8px 10px; background:var(--bg); border:1px dashed var(--border-light); border-radius:4px; color:var(--text-muted); font-size:11px; margin-top:4px; opacity:0.6; pointer-events:none; }
         
         .skip-logic-preview{background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:5px;padding:6px 10px;font-size:10px;margin-top:6px;display:none;color:#FBBF24}.field-item.has-skip .skip-logic-preview{display:block}
         .group-container{border:2px dashed var(--border-light);border-radius:var(--radius);padding:10px;margin-top:8px;transition:var(--transition);background:var(--bg-secondary)}.group-container.drag-over{border-color:var(--primary);background:rgba(249,115,22,0.06)}
@@ -83,7 +111,7 @@
         .properties-panel{width:300px;background:var(--surface);border-left:1px solid var(--border);padding:16px;overflow-y:auto;flex-shrink:0}
         .properties-panel h3{font-size:11px;text-transform:uppercase;color:var(--primary);margin-bottom:14px;letter-spacing:1px;font-weight:700}
         .prop-group{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}.prop-group label.pg-title{font-size:10px;font-weight:600;color:var(--primary);text-transform:uppercase;letter-spacing:0.4px;display:block;margin-bottom:4px}
-        .prop-group input[type="text"], .prop-group input[type="number"], .prop-group select, .prop-group textarea{width:100%;padding:7px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;background:var(--bg-secondary);color:var(--text);font-family:inherit;}
+        .prop-group input[type="text"], .prop-group input[type="number"], .prop-group select, .prop-group textarea{width:100%;padding:7px;border:2px solid var(--border-light);border-radius:5px;font-size:12px;background:var(--bg-secondary);color:var(--text);font-family:inherit;box-sizing:border-box;}
         
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;z-index:1000}
         .modal{background:var(--surface);border-radius:var(--radius-lg);padding:0;max-width:90%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,0.5);border:1px solid var(--border); display:flex;flex-direction:column;position:relative;}
@@ -98,7 +126,7 @@
         .preview-header-content h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
         .preview-header-content p { font-size: 13px; opacity: 0.85; }
         
-        .preview-top-actions { position:absolute; top:20px; right:20px; display:flex; align-items:center; gap:10px; }
+        .preview-top-actions { position:absolute; top:20px; right:20px; display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
         .preview-close-btn { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; }
         .preview-close-btn:hover { background:rgba(255,255,255,0.3); color:#fff; border-color:#fff; }
         .preview-lang-select { background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.3); color:#fff; padding:6px 10px; border-radius:var(--radius); font-size:12px; font-weight:600; outline:none; }
@@ -115,12 +143,11 @@
         
         .preview-nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;border-top:1px solid var(--border); background: var(--surface); border-radius: 0 0 var(--radius-lg) var(--radius-lg);}
         .step-indicator{display:flex;gap:5px}.step-dot{width:7px;height:7px;border-radius:50%;background:var(--border)}.step-dot.active{background:var(--primary);width:20px;border-radius:4px}
-        .ethiopian-date-badge{display:inline-block;background:linear-gradient(135deg,#009933,#FFD700,#FF0000);color:#fff;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:600}
         
-        .preview-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; background: var(--surface); color: var(--text); font-family: inherit; font-size: 13px; margin-top: 6px; outline: none; transition: var(--transition); }
+        .preview-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-light); border-radius: 6px; background: var(--surface); color: var(--text); font-family: inherit; font-size: 13px; margin-top: 6px; outline: none; transition: var(--transition); box-sizing: border-box; }
         .preview-input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(249,115,22,0.1); }
         .preview-options { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
-        .preview-options label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--text); background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-light); transition: var(--transition); }
+        .preview-options label { display: flex; align-items: center; gap: 8px; font-size: 13px; cursor: pointer; color: var(--text); background: var(--surface); padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border-light); transition: var(--transition); box-sizing: border-box;}
         .preview-options label:hover { border-color: var(--primary); background: rgba(249,115,22,0.05); }
         .preview-options input[type="radio"], .preview-options input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); cursor: pointer; }
         
@@ -128,17 +155,26 @@
         .preview-media-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; border: 1px dashed var(--primary); border-radius: 6px; color: var(--primary); background: rgba(249,115,22,0.05); font-weight: 600; font-size: 12px; cursor: pointer; transition: var(--transition); min-width:140px;}
         .preview-media-btn:hover { background: var(--primary); color: #fff; }
         
-        .preview-table { width: 100%; border-collapse: collapse; margin-top: 8px; border-radius: 6px; overflow: hidden; }
+        .preview-table { width: 100%; border-collapse: collapse; margin-top: 8px; border-radius: 6px; overflow: hidden; box-sizing: border-box; }
         .preview-table th { background: var(--bg-tertiary); color: var(--primary); font-size: 11px; text-transform: uppercase; padding: 10px; text-align: left; border: 1px solid var(--border-light); }
         .preview-table td { padding: 0; border: 1px solid var(--border-light); }
-        .preview-table input { width: 100%; border: none; background: transparent; padding: 10px; color: var(--text); outline: none; font-size: 12px; }
+        .preview-table input { width: 100%; border: none; background: transparent; padding: 10px; color: var(--text); outline: none; font-size: 12px; box-sizing: border-box;}
         
         .preview-label { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--text); display:flex; align-items:center; gap:8px;}
         .preview-unique-badge { font-size:9px; background:var(--unique); color:#fff; padding:2px 6px; border-radius:4px; font-weight:700; }
         
-        .preview-container-box { padding: 14px; border-left: 3px solid var(--primary); background: var(--surface); border-radius: 0 8px 8px 0; margin-top: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .add-entry-btn { width: 100%; padding: 10px; margin-top: 10px; border: 1px dashed var(--border-light); border-radius: 6px; background: transparent; color: var(--text-muted); cursor: pointer; transition: var(--transition); font-weight: 600; font-size: 12px; display:flex; justify-content:center; align-items:center; gap:6px;}
+        .preview-container-box { padding: 14px; border-left: 3px solid var(--primary); background: var(--surface); border-radius: 0 8px 8px 0; margin-top: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); box-sizing: border-box; }
+        .add-entry-btn { width: 100%; padding: 10px; margin-top: 10px; border: 1px dashed var(--border-light); border-radius: 6px; background: transparent; color: var(--text-muted); cursor: pointer; transition: var(--transition); font-weight: 600; font-size: 12px; display:flex; justify-content:center; align-items:center; gap:6px; box-sizing: border-box;}
         .add-entry-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(249,115,22,0.05); }
+
+        /* Strictly responsive for mobile data entry */
+        @media (max-width: 768px) {
+            .modal { width: 100% !important; max-width: 100% !important; height: 100% !important; max-height: 100vh !important; border-radius: 0 !important; border: none !important; }
+            .preview-header-block { border-radius: 0 !important; padding: 15px; }
+            .preview-top-actions { position: relative; top: 0; right: 0; margin-top: 10px; }
+            .preview-nav { border-radius: 0 !important; flex-wrap: wrap; gap: 10px; justify-content: center;}
+            .preview-container-box { padding: 10px; }
+        }
     </style>
 </head>
 <body class="dark-mode">
@@ -187,45 +223,51 @@
             <h1>Form Builder Pro</h1>
         </div>
         <div class="header-actions">
-            <select class="theme-switch" id="themeSelect" onchange="setTheme(this.value)"><option value="dark">🌙 Dark</option><option value="light">☀️ Light</option><option value="system">💻 System</option></select>
-            <button class="btn btn-outline btn-sm" onclick="importJSON()"><svg class="icon"><use href="#ic-upload"/></svg> Import</button>
-            <button class="btn btn-outline btn-sm" onclick="previewForm()"><svg class="icon"><use href="#ic-eye"/></svg> Preview</button>
-            <button class="btn btn-outline btn-sm" onclick="exportJSON()"><svg class="icon"><use href="#ic-download"/></svg> Export</button>
-            <button class="btn btn-success btn-sm" onclick="saveForm()"><svg class="icon"><use href="#ic-save"/></svg> Save</button>
+            <select class="theme-switch" id="themeSelect" onchange="setTheme(this.value)" title="Choose Theme">
+                <option value="dark">🌙 Dark</option>
+                <option value="light">☀️ Light</option>
+                <option value="light-blue">🌊 Light Blue</option>
+                <option value="light-green">🍃 Light Green</option>
+                <option value="system">💻 System</option>
+            </select>
+            <button class="btn btn-outline btn-sm" onclick="importJSON()" title="Import from JSON"><svg class="icon"><use href="#ic-upload"/></svg> Import</button>
+            <button class="btn btn-outline btn-sm" onclick="previewForm()" title="Preview Final Form"><svg class="icon"><use href="#ic-eye"/></svg> Preview</button>
+            <button class="btn btn-outline btn-sm" onclick="exportJSON()" title="Export configuration to JSON"><svg class="icon"><use href="#ic-download"/></svg> Export</button>
+            <button class="btn btn-success btn-sm" onclick="saveForm()" title="Save Progress"><svg class="icon"><use href="#ic-save"/></svg> Save</button>
         </div>
     </div>
 
     <div class="main-container">
         <div class="sidebar">
             <div class="sidebar-section"><h3>📝 Basic</h3><div class="field-types">
-                <div class="field-type-item" draggable="true" data-type="text"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-text"/></svg></div><div class="field-type-info"><div class="field-type-name">Text</div><div class="field-type-desc">Short answer</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="textarea"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-textarea"/></svg></div><div class="field-type-info"><div class="field-type-name">Paragraph</div><div class="field-type-desc">Long text</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="number"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-number"/></svg></div><div class="field-type-info"><div class="field-type-name">Number</div><div class="field-type-desc">Numeric</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="date"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-date"/></svg></div><div class="field-type-info"><div class="field-type-name">Date</div><div class="field-type-desc">Calendar</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="time"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-time"/></svg></div><div class="field-type-info"><div class="field-type-name">Time</div><div class="field-type-desc">Clock Selector</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="text" title="Drag to add Short Text"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-text"/></svg></div><div class="field-type-info"><div class="field-type-name">Text</div><div class="field-type-desc">Short answer</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="textarea" title="Drag to add Paragraph"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-textarea"/></svg></div><div class="field-type-info"><div class="field-type-name">Paragraph</div><div class="field-type-desc">Long text</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="number" title="Drag to add Number"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-number"/></svg></div><div class="field-type-info"><div class="field-type-name">Number</div><div class="field-type-desc">Numeric field</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="date" title="Drag to add Date"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-date"/></svg></div><div class="field-type-info"><div class="field-type-name">Date</div><div class="field-type-desc">Calendar entry</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="time" title="Drag to add Time"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-time"/></svg></div><div class="field-type-info"><div class="field-type-name">Time</div><div class="field-type-desc">Clock selector</div></div></div>
             </div></div>
             <div class="sidebar-section"><h3>☑️ Choice</h3><div class="field-types">
-                <div class="field-type-item" draggable="true" data-type="select"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-select"/></svg></div><div class="field-type-info"><div class="field-type-name">Dropdown</div><div class="field-type-desc">Single select</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="radio"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-radio"/></svg></div><div class="field-type-info"><div class="field-type-name">Radio</div><div class="field-type-desc">One choice</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="checkbox"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-checkbox"/></svg></div><div class="field-type-info"><div class="field-type-name">Checkbox</div><div class="field-type-desc">Multi-select</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="rating"><div class="field-type-icon"><svg class="icon icon-lg" style="color:#F97316"><use href="#ic-star"/></svg></div><div class="field-type-info"><div class="field-type-name">Rating</div><div class="field-type-desc">Stars</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="cascade"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-cascade"/></svg></div><div class="field-type-info"><div class="field-type-name">Cascade</div><div class="field-type-desc">Linked selects</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="select" title="Drag to add Dropdown"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-select"/></svg></div><div class="field-type-info"><div class="field-type-name">Dropdown</div><div class="field-type-desc">Single select list</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="radio" title="Drag to add Radio Buttons"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-radio"/></svg></div><div class="field-type-info"><div class="field-type-name">Radio</div><div class="field-type-desc">One choice selection</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="checkbox" title="Drag to add Checkboxes"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-checkbox"/></svg></div><div class="field-type-info"><div class="field-type-name">Checkbox</div><div class="field-type-desc">Multi-select options</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="rating" title="Drag to add Rating Scale"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-star"/></svg></div><div class="field-type-info"><div class="field-type-name">Rating</div><div class="field-type-desc">Star rating system</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="cascade" title="Drag to add Data Cascade"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-cascade"/></svg></div><div class="field-type-info"><div class="field-type-name">Cascade</div><div class="field-type-desc">Linked selections</div></div></div>
             </div></div>
             <div class="sidebar-section"><h3>📸 Media</h3><div class="field-types">
-                <div class="field-type-item" draggable="true" data-type="photo"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-camera"/></svg></div><div class="field-type-info"><div class="field-type-name">Photo</div><div class="field-type-desc">Camera</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="sound"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-mic"/></svg></div><div class="field-type-info"><div class="field-type-name">Audio</div><div class="field-type-desc">Recording</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="video"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-video"/></svg></div><div class="field-type-info"><div class="field-type-name">Video</div><div class="field-type-desc">Recording</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="photo" title="Drag to add Photo Input"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-camera"/></svg></div><div class="field-type-info"><div class="field-type-name">Photo</div><div class="field-type-desc">Camera capture</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="sound" title="Drag to add Audio Record"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-mic"/></svg></div><div class="field-type-info"><div class="field-type-name">Audio</div><div class="field-type-desc">Mic recording</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="video" title="Drag to add Video Record"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-video"/></svg></div><div class="field-type-info"><div class="field-type-name">Video</div><div class="field-type-desc">Camera recording</div></div></div>
             </div></div>
             <div class="sidebar-section"><h3>📍 Special</h3><div class="field-types">
-                <div class="field-type-item" draggable="true" data-type="gps"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-gps"/></svg></div><div class="field-type-info"><div class="field-type-name">GPS</div><div class="field-type-desc">Location</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="barcode"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-scan"/></svg></div><div class="field-type-info"><div class="field-type-name">Scan</div><div class="field-type-desc">Barcode/QR</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="document"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-document"/></svg></div><div class="field-type-info"><div class="field-type-name">Document</div><div class="field-type-desc">File upload</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="gps" title="Drag to add GPS Tag"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-gps"/></svg></div><div class="field-type-info"><div class="field-type-name">GPS</div><div class="field-type-desc">Location point</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="barcode" title="Drag to add Barcode Scan"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-scan"/></svg></div><div class="field-type-info"><div class="field-type-name">Scan</div><div class="field-type-desc">Barcode / QR Reader</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="document" title="Drag to add File Upload"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-document"/></svg></div><div class="field-type-info"><div class="field-type-name">Document</div><div class="field-type-desc">File attachment</div></div></div>
             </div></div>
             <div class="sidebar-section"><h3>📁 Structure</h3><div class="field-types">
-                <div class="field-type-item" draggable="true" data-type="group"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-folder"/></svg></div><div class="field-type-info"><div class="field-type-name">Group</div><div class="field-type-desc">Container</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="repeat"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-repeat"/></svg></div><div class="field-type-info"><div class="field-type-name">Repeat</div><div class="field-type-desc">Loop group</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="child_entry"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-child"/></svg></div><div class="field-type-info"><div class="field-type-name">Child Entry</div><div class="field-type-desc">Per member</div></div></div>
-                <div class="field-type-item" draggable="true" data-type="table"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-grid"/></svg></div><div class="field-type-info"><div class="field-type-name">Table</div><div class="field-type-desc">Grid</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="group" title="Drag to add Group Container"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-folder"/></svg></div><div class="field-type-info"><div class="field-type-name">Group</div><div class="field-type-desc">Folder container</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="repeat" title="Drag to add Repeatable Group"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-repeat"/></svg></div><div class="field-type-info"><div class="field-type-name">Repeat</div><div class="field-type-desc">Looping section</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="child_entry" title="Drag to add Child/Member Entry"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-child"/></svg></div><div class="field-type-info"><div class="field-type-name">Child Entry</div><div class="field-type-desc">Per-member loop</div></div></div>
+                <div class="field-type-item" draggable="true" data-type="table" title="Drag to add Matrix Table"><div class="field-type-icon"><svg class="icon icon-lg"><use href="#ic-grid"/></svg></div><div class="field-type-info"><div class="field-type-name">Table</div><div class="field-type-desc">Grid matrix</div></div></div>
             </div></div>
         </div>
 
@@ -253,7 +295,7 @@
 
         <div class="properties-panel" id="propertiesPanel">
             <h3><svg class="icon"><use href="#ic-settings"/></svg> Properties</h3>
-            <div id="propertiesContent"><p style="color:var(--text-muted);font-size:12px;margin-top:20px;text-align:center;">Select a field</p></div>
+            <div id="propertiesContent"><p style="color:var(--text-muted);font-size:12px;margin-top:20px;text-align:center;">Select a field to view properties</p></div>
         </div>
     </div>
 
@@ -270,7 +312,7 @@
         </div>
     </div>
 
-    <div class="modal-overlay" id="previewModal" style="display:none; padding:20px;">
+    <div class="modal-overlay" id="previewModal" style="display:none; padding:10px;">
         <div class="modal" style="width:750px; height: 100%;">
             
             <div class="preview-header-block" id="previewHeaderBlock">
@@ -307,11 +349,13 @@
     <script>
         function setTheme(mode){localStorage.setItem('fbtheme',mode);applyTheme(mode)}
         function applyTheme(mode){
-            document.body.classList.remove('dark-mode','light-mode');
-            if(mode==='dark')document.body.classList.add('dark-mode');
-            else if(mode==='light')document.body.classList.add('light-mode');
-            else if(mode==='system')document.body.classList.add(window.matchMedia('(prefers-color-scheme:dark)').matches?'dark-mode':'light-mode');
-            document.getElementById('themeSelect').value=mode;
+            document.body.classList.remove('dark-mode','light-mode','light-blue-mode','light-green-mode');
+            let actualMode = mode;
+            if(mode === 'system'){
+                actualMode = window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark' : 'light';
+            }
+            document.body.classList.add(actualMode + '-mode');
+            document.getElementById('themeSelect').value = mode;
         }
         window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',()=>{if(localStorage.getItem('fbtheme')==='system')applyTheme('system')});
         applyTheme(localStorage.getItem('fbtheme')||'dark');
@@ -330,7 +374,7 @@
             number:{label:'Number',placeholder:'Enter number...',hint:'Numeric value',showHint:true,required:false,unique:false,min:'',max:'',maxDigits:'',allowDecimal:false,skipLogic:null},
             date:{label:'Date',hint:'Select date',showHint:true,required:false,calendar:'gregorian',format:'YYYY-MM-DD',noFuture:false,skipLogic:null},
             time:{label:'Time',hint:'Select time',showHint:true,required:false,skipLogic:null},
-            select:{label:'Choose',placeholder:'Select...',hint:'Pick one option',showHint:true,required:false,options:['Option 1','Option 2','Option 3'],skipLogic:null},
+            select:{label:'Choose Option',placeholder:'Select...',hint:'Pick one option',showHint:true,required:false,options:['Option 1','Option 2','Option 3'],skipLogic:null},
             radio:{label:'Pick one',hint:'Single choice',showHint:true,required:false,shuffle:false,options:['Choice A','Choice B','Choice C'],skipLogic:null},
             checkbox:{label:'Check all that apply',hint:'Multiple choices',showHint:true,required:false,shuffle:false,options:['Item 1','Item 2','Item 3'],skipLogic:null},
             gps:{label:'Location',hint:'GPS coordinates',showHint:true,required:false,skipLogic:null},
@@ -338,13 +382,13 @@
             sound:{label:'Audio',hint:'Record audio',showHint:true,required:false,maxDuration:120,skipLogic:null},
             video:{label:'Video',hint:'Record video',showHint:true,required:false,maxDuration:60,skipLogic:null},
             rating:{label:'Rating',hint:'Rate 1-5',showHint:true,required:false,maxStars:5,skipLogic:null},
-            barcode:{label:'Scan',hint:'Scan code',showHint:true,required:false,unique:false,skipLogic:null},
-            document:{label:'Document',hint:'Upload file',showHint:true,required:false,allowedTypes:['pdf','doc','docx','jpg','png'],skipLogic:null},
-            child_entry:{label:'Child Entry',hint:'Repeat for each member',showHint:true,required:false,prefix:'ID-',startNumber:1,digitPadding:3,children:[],skipLogic:null},
-            group:{label:'Group',hint:'Related fields',showHint:true,children:[],skipLogic:null},
-            repeat:{label:'Repeat Group',hint:'Repeatable',showHint:true,children:[],skipLogic:null},
-            table:{label:'Table',hint:'Grid data',showHint:true,columns:[{name:'Col 1'},{name:'Col 2'}],rowLabels:['Row 1','Row 2'],skipLogic:null},
-            cascade:{label:'Cascade',hint:'Linked selects',showHint:true,required:false,levels:[{name:'Level 1',options:['A','B']},{name:'Level 2',options:['C','D']}],skipLogic:null}
+            barcode:{label:'Scan Code',hint:'Scan Barcode/QR',showHint:true,required:false,unique:false,skipLogic:null},
+            document:{label:'Document Upload',hint:'Attach file',showHint:true,required:false,allowedTypes:['pdf','doc','docx','jpg','png'],skipLogic:null},
+            child_entry:{label:'Child Roster',hint:'Repeat for each member',showHint:true,required:false,prefix:'ID-',startNumber:1,digitPadding:3,children:[],skipLogic:null},
+            group:{label:'Group',hint:'Related fields container',showHint:true,children:[],skipLogic:null},
+            repeat:{label:'Repeat Group',hint:'Repeatable section',showHint:true,children:[],skipLogic:null},
+            table:{label:'Data Table',hint:'Grid data mapping',showHint:true,columns:[{name:'Column 1'},{name:'Column 2'}],rowLabels:['Row 1','Row 2'],skipLogic:null},
+            cascade:{label:'Facility Location Cascade',hint:'Region > Zone > Woreda > Facility',showHint:true,required:false,levels:[{name:'Region',options:['Addis Ababa']},{name:'Zone',options:['Addis Ketema','Yeka']},{name:'Woreda',options:['Woreda 01','Woreda 03','Woreda 11','Woreda 12']},{name:'Health Facility',options:['Ginbot 20 Health center','Tsion Specialty Child Health Clinic']}],skipLogic:null}
         };
 
         function icon(id,s=''){return`<svg class="icon${s?' icon-'+s:''}"><use href="#ic-${id}"/></svg>`}
@@ -415,6 +459,10 @@
             return closest ? closest.id : null;
         }
 
+        function generateUniqueId(prefix) {
+            return prefix + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
         function insertField(field, targetParentId, insertBeforeId) {
             if (!field) return;
             let p = targetParentId;
@@ -470,13 +518,7 @@
             if (payload.source === 'sidebar') {
                 const type = payload.type;
                 if (type && fieldDefaults[type]) {
-                    const id = 'f' + (++fieldIdCounter);
-                    let defaults = JSON.parse(JSON.stringify(fieldDefaults[type]));
-                    if (type === 'child_entry') defaults.children = [{...JSON.parse(JSON.stringify(fieldDefaults.text)), id:'cn_'+Date.now(), label:'Name'}];
-                    const newField = {...defaults, id, type};
-                    insertField(newField, parentId, insertBeforeId);
-                    renderCanvas();
-                    selectField(id);
+                    addField(type, {}, parentId, insertBeforeId);
                 }
             } else if (payload.source === 'canvas') {
                 const fieldId = payload.fieldId;
@@ -524,11 +566,22 @@
             });
         }
 
-        function addField(type, props={}) {
+        function addField(type, props={}, parentId=null, insertBeforeId=null) {
             const id = 'f' + (++fieldIdCounter);
             let defaults = JSON.parse(JSON.stringify(fieldDefaults[type]));
-            if (type === 'child_entry') defaults.children = [{...JSON.parse(JSON.stringify(fieldDefaults.text)), id:'cn_'+Date.now(), label:'Name'}];
-            formFields.push({...defaults, ...props, id, type});
+            
+            // Build the specific child entry block requested
+            if (type === 'child_entry') {
+                defaults.children = [
+                    {...JSON.parse(JSON.stringify(fieldDefaults.text)), id: generateUniqueId('cn'), label: 'First Name'},
+                    {...JSON.parse(JSON.stringify(fieldDefaults.text)), id: generateUniqueId('cn'), label: 'Last Name'},
+                    {...JSON.parse(JSON.stringify(fieldDefaults.select)), id: generateUniqueId('cn'), label: 'Gender', options: ['Male', 'Female']},
+                    {...JSON.parse(JSON.stringify(fieldDefaults.date)), id: generateUniqueId('cn'), label: 'Date of Birth'}
+                ];
+            }
+            
+            const newField = {...defaults, ...props, id, type};
+            insertField(newField, parentId, insertBeforeId);
             renderCanvas();
             selectField(id);
         }
@@ -560,29 +613,29 @@
                 childrenHTML = `<div class="group-container" style="${isCollapsed?'display:none':''}"><div class="group-drop-zone" data-parent-id="${f.id}"></div></div>`;
             }
             
-            let collapseIcon = `<span class="collapse-icon ${isCollapsed?'collapsed':''}" onclick="event.stopPropagation();toggleCollapse('${f.id}')" title="Collapse/Expand">${icon('chevron-down')}</span>`;
+            let collapseIcon = `<span class="collapse-icon ${isCollapsed?'collapsed':''}" onclick="event.stopPropagation();toggleCollapse('${f.id}')" title="Collapse/Expand Grid">${icon('chevron-down')}</span>`;
             
             return `
             <div class="field-item ${sel?'selected':''} ${hasSkip?'has-skip':''} ${isUnique?'is-unique':''} ${parentId?'group-child-item':''}" id="${f.id}" data-parent-id="${parentId||''}" draggable="true" onclick="selectField('${f.id}')" style="border-left-color:${color};${parentId?'margin-left:15px;':''}">
                 <div class="field-number">${num}</div>
                 <div class="field-item-header">
                     ${collapseIcon}
-                    <span class="field-btn" style="cursor:grab">${icon('drag')}</span>
+                    <span class="field-btn" style="cursor:grab" title="Drag to reorder">${icon('drag')}</span>
                     <span class="field-badge field-badge-type">${fIcon(f.type)} ${f.type.toUpperCase()}</span>
-                    ${hasSkip?`<span class="field-badge field-badge-skip">${icon('skip')} SKIP</span>`:''}
-                    ${isUnique?`<span class="field-badge field-badge-unique">UNIQUE</span>`:''}
+                    ${hasSkip?`<span class="field-badge field-badge-skip" title="Has Skip Logic Rules">${icon('skip')} SKIP</span>`:''}
+                    ${isUnique?`<span class="field-badge field-badge-unique" title="Enforces Unique Responses">UNIQUE</span>`:''}
                     <div class="field-item-actions">
-                        <button class="field-btn" onclick="event.stopPropagation();openSkipLogic('${f.id}')">${icon('skip')}</button>
-                        <button class="field-btn" onclick="event.stopPropagation();moveField('${f.id}','up','${parentId||''}')">${icon('up')}</button>
-                        <button class="field-btn" onclick="event.stopPropagation();moveField('${f.id}','down','${parentId||''}')">${icon('down')}</button>
-                        <button class="field-btn" onclick="event.stopPropagation();duplicateField('${f.id}')">${icon('copy')}</button>
-                        <button class="field-btn delete" onclick="event.stopPropagation();deleteField('${f.id}')">${icon('trash')}</button>
+                        <button class="field-btn" title="Add Skip Logic" onclick="event.stopPropagation();openSkipLogic('${f.id}')">${icon('skip')}</button>
+                        <button class="field-btn" title="Move Up" onclick="event.stopPropagation();moveField('${f.id}','up','${parentId||''}')">${icon('up')}</button>
+                        <button class="field-btn" title="Move Down" onclick="event.stopPropagation();moveField('${f.id}','down','${parentId||''}')">${icon('down')}</button>
+                        <button class="field-btn" title="Duplicate Field" onclick="event.stopPropagation();duplicateField('${f.id}')">${icon('copy')}</button>
+                        <button class="field-btn delete" title="Delete Field" onclick="event.stopPropagation();deleteField('${f.id}')">${icon('trash')}</button>
                     </div>
                 </div>
                 ${hasSkip?`<div class="skip-logic-preview">🔀 ${getSkipText(f.skipLogic)}</div>`:''}
                 <div class="field-body" style="${isCollapsed?'display:none':''}">
                     <div class="field-row">
-                        <label>${f.label}${f.required?' <span class="required-star">*</span>':''}</label>
+                        <label>${f.label}${f.required?' <span style="color:var(--danger)">*</span>':''}</label>
                         <input value="${f.label}" onchange="updateProp('${f.id}','label',this.value)" onclick="event.stopPropagation()">
                         <span class="hint-text" style="${f.showHint !== false ? '' : 'display:none'}">💡 ${f.hint||''}</span>
                     </div>
@@ -594,9 +647,9 @@
 
         function renderFieldSpecific(f) {
             if(['select','radio','checkbox'].includes(f.type)) {
-                return `<div class="field-row"><label>Options</label>${f.options.map((o,i)=>`<div style="display:flex;gap:4px;margin-bottom:3px"><input value="${o}" onchange="updateOption('${f.id}',${i},this.value)" onclick="event.stopPropagation()" style="flex:1"><button class="field-btn" onclick="event.stopPropagation();moveOption('${f.id}',${i},-1)" title="Move Up">${icon('up')}</button><button class="field-btn" onclick="event.stopPropagation();moveOption('${f.id}',${i},1)" title="Move Down">${icon('down')}</button><button class="field-btn delete" onclick="event.stopPropagation();removeOption('${f.id}',${i})">${icon('trash')}</button></div>`).join('')}<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();addOption('${f.id}')" style="margin-top:3px;justify-content:center">${icon('plus')} Add Option</button></div>`;
+                return `<div class="field-row"><label>Options</label>${f.options.map((o,i)=>`<div style="display:flex;gap:4px;margin-bottom:3px"><input value="${o}" onchange="updateOption('${f.id}',${i},this.value)" onclick="event.stopPropagation()" style="flex:1"><button class="field-btn" onclick="event.stopPropagation();moveOption('${f.id}',${i},-1)" title="Move Up">${icon('up')}</button><button class="field-btn" onclick="event.stopPropagation();moveOption('${f.id}',${i},1)" title="Move Down">${icon('down')}</button><button class="field-btn delete" onclick="event.stopPropagation();removeOption('${f.id}',${i})" title="Remove Option">${icon('trash')}</button></div>`).join('')}<button class="btn btn-outline btn-sm" onclick="event.stopPropagation();addOption('${f.id}')" style="margin-top:3px;justify-content:center">${icon('plus')} Add Option</button></div>`;
             }
-            if(f.type==='cascade') return `<div class="field-row"><label>Cascade Setup</label><span style="font-size:10px;color:var(--text-muted)">Configure via properties panel ➔</span></div>`;
+            if(f.type==='cascade') return `<div class="field-row"><label>Cascade Setup</label><span style="font-size:10px;color:var(--text-muted)">Configure values via the right properties panel ➔</span></div>`;
             
             if(f.type==='table') {
                 let cols = f.columns || [{name:'Col 1'}, {name:'Col 2'}];
@@ -604,13 +657,13 @@
                 
                 let ths = cols.map((c, ci) => `
                     <th style="padding:4px; border:1px solid var(--border-light); font-weight:normal;">
-                        <div style="display:flex;gap:2px"><input type="text" value="${c.name||c}" onchange="updateTableCol('${f.id}',${ci},this.value)" style="width:100%;padding:4px;font-size:10px;border:none;background:rgba(255,255,255,0.05);color:var(--text);border-radius:2px;"><button class="field-btn" style="padding:2px" onclick="event.stopPropagation();removeTableCol('${f.id}',${ci})">${icon('trash')}</button></div>
+                        <div style="display:flex;gap:2px"><input type="text" value="${c.name||c}" onchange="updateTableCol('${f.id}',${ci},this.value)" style="width:100%;padding:4px;font-size:10px;border:none;background:rgba(255,255,255,0.05);color:var(--text);border-radius:2px;"><button class="field-btn" style="padding:2px" title="Delete Column" onclick="event.stopPropagation();removeTableCol('${f.id}',${ci})">${icon('trash')}</button></div>
                     </th>`).join('');
                 
                 let trs = rowLabels.map((r, ri) => `
                     <tr>
                         <td style="padding:4px; border:1px solid var(--border-light); width:120px;">
-                            <div style="display:flex;gap:2px"><input type="text" value="${r}" onchange="updateTableRow('${f.id}',${ri},this.value)" style="width:100%;padding:4px;font-size:10px;border:none;background:rgba(255,255,255,0.05);color:var(--text);border-radius:2px;"><button class="field-btn" style="padding:2px" onclick="event.stopPropagation();removeTableRow('${f.id}',${ri})">${icon('trash')}</button></div>
+                            <div style="display:flex;gap:2px"><input type="text" value="${r}" onchange="updateTableRow('${f.id}',${ri},this.value)" style="width:100%;padding:4px;font-size:10px;border:none;background:rgba(255,255,255,0.05);color:var(--text);border-radius:2px;"><button class="field-btn" style="padding:2px" title="Delete Row" onclick="event.stopPropagation();removeTableRow('${f.id}',${ri})">${icon('trash')}</button></div>
                         </td>
                         ${cols.map(() => `<td style="padding:4px; border:1px solid var(--border-light); background:rgba(255,255,255,0.02)"></td>`).join('')}
                     </tr>`).join('');
@@ -619,13 +672,13 @@
                     <div style="overflow-x:auto; margin-top:4px;">
                         <table style="width:100%; border-collapse:collapse; font-size:11px; border:1px solid var(--border-light)">
                             <thead><tr>
-                                <th style="padding:4px; border:1px solid var(--border-light); width:120px;"><button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;padding:4px;" onclick="event.stopPropagation();addTableCol('${f.id}')">${icon('plus')} Add Col</button></th>
+                                <th style="padding:4px; border:1px solid var(--border-light); width:120px;"><button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;padding:4px;" onclick="event.stopPropagation();addTableCol('${f.id}')" title="Add New Column">${icon('plus')} Add Col</button></th>
                                 ${ths}
                             </tr></thead>
                             <tbody>
                                 ${trs}
                                 <tr>
-                                    <td style="padding:4px; border:1px solid var(--border-light); text-align:center;"><button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;padding:4px;" onclick="event.stopPropagation();addTableRow('${f.id}')">${icon('plus')} Add Row</button></td>
+                                    <td style="padding:4px; border:1px solid var(--border-light); text-align:center;"><button class="btn btn-outline btn-sm" style="width:100%;justify-content:center;padding:4px;" onclick="event.stopPropagation();addTableRow('${f.id}')" title="Add New Row">${icon('plus')} Add Row</button></td>
                                     <td colspan="${cols.length}" style="border:1px solid var(--border-light);"></td>
                                 </tr>
                             </tbody>
@@ -640,7 +693,8 @@
                 return `<div class="field-row"><label>Allowed File Types</label><div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:4px">${['pdf','doc','docx','xls','xlsx','jpg','jpeg','png','gif','mp4','mp3'].map(t=>`<label style="font-size:10px;display:flex;align-items:center;gap:2px"><input type="checkbox" ${types.includes(t)?'checked':''} onclick="toggleDocType('${f.id}','${t}',this.checked)" style="width:auto"> ${t.toUpperCase()}</label>`).join('')}</div></div>`;
             }
 
-            return `<div class="field-row"><div class="mock-input">[ ${f.type.toUpperCase()} INPUT ]</div></div>`;
+            // Return empty instead of the placeholder Input
+            return ``;
         }
 
         function toggleDocType(fid, type, checked) {
@@ -721,7 +775,7 @@
                 {val:'is_not_empty',label:'Not empty'},{val:'regex',label:'Regex'}
             ];
             return `<div style="background:var(--bg-tertiary);border:1px solid var(--border-light);border-radius:6px;padding:10px;margin-bottom:8px">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="font-size:11px">Condition ${i+1}</strong><button class="field-btn delete" onclick="removeCondition(${i})">${icon('trash')}</button></div>
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px"><strong style="font-size:11px">Condition ${i+1}</strong><button class="field-btn delete" onclick="removeCondition(${i})" title="Remove Condition">${icon('trash')}</button></div>
                 <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
                     <select onchange="tempSkipLogic.conditions[${i}].fieldId=this.value" style="padding:5px;border:1px solid var(--border-light);border-radius:4px;background:var(--bg-secondary);color:var(--text);font-size:11px">
                         <option value="">Field...</option>${fields.map(f=>`<option value="${f.id}" ${c.fieldId===f.id?'selected':''}>${f.label}</option>`).join('')}
@@ -787,7 +841,7 @@
         function renderProperties() {
             const f = findFieldById(formFields,selectedFieldId);
             const c = document.getElementById('propertiesContent');
-            if(!f) { c.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:40px">Select a field to configure logic</p>'; return; }
+            if(!f) { c.innerHTML = '<p style="text-align:center;color:var(--text-muted);font-size:12px;margin-top:40px">Select a field to configure logics</p>'; return; }
             
             let h = `<div class="prop-group"><label class="pg-title">Field Type</label><input type="text" value="${f.type.toUpperCase()}" readonly style="background:var(--bg-tertiary);border-color:var(--border);color:var(--text-muted)"></div>`;
             
@@ -835,7 +889,7 @@
                 let textVal = (f.levels||[]).map(l => `${l.name}: ${l.options.join(', ')}`).join('\n');
                 h += `<div class="prop-group"><label class="pg-title">Cascade Setup (CSV / Manual)</label>
                       <textarea id="csv_${f.id}" style="width:100%;height:100px;padding:8px;border:2px solid var(--border-light);border-radius:4px;background:var(--bg-secondary);color:var(--text);font-size:11px;margin-bottom:6px;font-family:inherit" placeholder="Region: North, South\nZone: A, B, C">${textVal}</textarea>
-                      <button class="btn btn-primary btn-sm" style="width:100%; justify-content:center;" onclick="applyCascadeCSV('${f.id}')">Apply Cascade CSV</button>
+                      <button class="btn btn-primary btn-sm" style="width:100%; justify-content:center;" onclick="applyCascadeCSV('${f.id}')">Apply Cascade Rules</button>
                       <span class="hint-text" style="display:block;margin-top:6px;line-height:1.4">Format: <b>LevelName: opt1, opt2</b><br>Each level on a new line.</span>
                       </div>`;
             }
@@ -850,7 +904,7 @@
                 h += `<div class="prop-group"><label class="pg-title">Allowed Types Summary</label><div style="font-size:10px;padding:6px;background:var(--bg-secondary);border-radius:4px">${(f.allowedTypes||[]).join(', ').toUpperCase() || 'None Selected'}</div></div>`;
             }
 
-            h += `<div class="prop-group" style="margin-top:20px"><button class="btn btn-sm" style="background:var(--danger-light);color:var(--danger);width:100%;justify-content:center" onclick="deleteField('${f.id}')">${icon('trash')} Delete Field</button></div>`;
+            h += `<div class="prop-group" style="margin-top:20px"><button class="btn btn-sm" style="background:var(--danger);color:#fff;width:100%;justify-content:center;box-shadow:none;" onclick="deleteField('${f.id}')" title="Delete Form Element">${icon('trash')} Delete Field</button></div>`;
             c.innerHTML = h;
         }
 
@@ -887,10 +941,10 @@
                     const dayOpts = Array.from({length:30}, (_,i) => `<option>${i+1}</option>`).join('');
                     const yearOpts = Array.from({length:21}, (_,i) => `<option>${2010+i}</option>`).join('');
                     
-                    return `<div style="display:flex;gap:8px">
-                                <select class="preview-input" style="flex:2"><option value="">🇪🇹 Month</option>${monthOpts}</select>
-                                <select class="preview-input" style="flex:1"><option value="">Day</option>${dayOpts}</select>
-                                <select class="preview-input" style="flex:1.5"><option value="">Year</option>${yearOpts}</select>
+                    return `<div style="display:flex;gap:8px;flex-wrap:wrap;">
+                                <select class="preview-input" style="flex:2;min-width:120px"><option value="">🇪🇹 Month</option>${monthOpts}</select>
+                                <select class="preview-input" style="flex:1;min-width:80px"><option value="">Day</option>${dayOpts}</select>
+                                <select class="preview-input" style="flex:1.5;min-width:100px"><option value="">Year</option>${yearOpts}</select>
                             </div>`;
                 }
                 let maxAttr = f.noFuture ? `max="${new Date().toISOString().split('T')[0]}"` : '';
@@ -899,21 +953,21 @@
             
             if (f.type === 'time') return `<input type="time" class="preview-input" step="1">`;
             
-            if (f.type === 'rating') return `<div class="preview-input" style="color:var(--primary);font-size:22px;letter-spacing:4px;background:transparent;border:none;padding:0;margin-top:10px;cursor:pointer">⭐⭐⭐⭐⭐</div>`;
+            if (f.type === 'rating') return `<div class="preview-input" style="color:var(--primary);font-size:26px;letter-spacing:6px;background:transparent;border:none;padding:0;margin-top:10px;cursor:pointer">⭐⭐⭐⭐⭐</div>`;
             
             if (f.type === 'gps') {
                 return `<div style="display:flex;gap:10px;margin-top:6px;flex-wrap:wrap">
-                            <button class="preview-media-btn" style="flex:1;min-width:180px" onclick="if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{this.nextElementSibling.querySelector('.lat').value=p.coords.latitude;this.nextElementSibling.querySelector('.lng').value=p.coords.longitude;this.nextElementSibling.querySelector('.acc').value=Math.round(p.coords.accuracy)+'m';})}"><svg class="icon"><use href="#ic-gps"/></svg> 📍 Detect Current Location</button>
-                            <div style="display:flex;gap:5px;flex:2;min-width:250px;">
-                                <input type="number" class="preview-input lat" style="margin-top:0" placeholder="Latitude">
-                                <input type="number" class="preview-input lng" style="margin-top:0" placeholder="Longitude">
+                            <button class="preview-media-btn" style="flex:1;min-width:100%" onclick="if(navigator.geolocation){navigator.geolocation.getCurrentPosition(p=>{this.nextElementSibling.querySelector('.lat').value=p.coords.latitude;this.nextElementSibling.querySelector('.lng').value=p.coords.longitude;this.nextElementSibling.querySelector('.acc').value=Math.round(p.coords.accuracy)+'m';})}"><svg class="icon"><use href="#ic-gps"/></svg> 📍 Detect Location</button>
+                            <div style="display:flex;gap:5px;flex:2;min-width:100%;">
+                                <input type="number" class="preview-input lat" style="margin-top:0" placeholder="Lat">
+                                <input type="number" class="preview-input lng" style="margin-top:0" placeholder="Lng">
                                 <input type="text" class="preview-input acc" style="margin-top:0;width:80px;background:var(--bg-tertiary)" placeholder="Accuracy" readonly>
                             </div>
                         </div>`;
             }
 
             if (['photo', 'document', 'sound', 'video', 'barcode'].includes(f.type)) {
-                let capTxt = f.type==='photo'?'📷 Take Photo':f.type==='video'?'🎥 Record Video':f.type==='sound'?'🎙️ Record Audio':f.type==='barcode'?'🔍 Scan Code':'📄 Scan Document';
+                let capTxt = f.type==='photo'?'📷 Take Photo':f.type==='video'?'🎥 Record Video':f.type==='sound'?'🎙️ Record Audio':f.type==='barcode'?'🔍 Scan Code':'📄 Attach Document';
                 return `<div class="preview-media-grid">
                             <button class="preview-media-btn">${capTxt}</button>
                             <button class="preview-media-btn" style="border-style:solid;background:transparent;color:var(--text)">📁 Upload File</button>
@@ -925,16 +979,18 @@
                 let rowLabels = f.rowLabels || ['Row 1', 'Row 2'];
                 let ths = `<th></th>` + cols.map(c => `<th>${c.name||c}</th>`).join('');
                 let trs = rowLabels.map((r) => `<tr><td style="font-size:11px;font-weight:600;color:var(--text);background:var(--bg-secondary);padding:10px">${r}</td>${cols.map(()=>`<td><input type="text" placeholder="..." style="background:transparent;border:none;width:100%;color:var(--text);outline:none"></td>`).join('')}</tr>`).join('');
-                return `<div style="overflow-x:auto"><table class="preview-table"><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table></div>`;
+                return `<div style="overflow-x:auto; width: 100%;"><table class="preview-table"><thead><tr>${ths}</tr></thead><tbody>${trs}</tbody></table></div>`;
             }
 
             if (f.type === 'cascade') {
                 let levels = f.levels || [{name:'Level 1'}, {name:'Level 2'}];
                 return `<div style="display:flex;flex-direction:column;gap:8px;margin-top:8px">` + 
-                       levels.map(l => `<select class="preview-input" style="margin-top:0"><option>Select ${l.name}...</option></select>`).join('') + `</div>`;
+                       levels.map(l => `<select class="preview-input" style="margin-top:0"><option>Select ${l.name}...</option>
+                       ${l.options.map(opt => `<option>${opt}</option>`).join('')}
+                       </select>`).join('') + `</div>`;
             }
             
-            return `<div class="preview-input" style="text-align:center;color:var(--text-muted)">[ ${f.type.toUpperCase()} FIELD ]</div>`;
+            return ``;
         }
 
         function renderPreviewNode(f, isRoot) {
@@ -943,7 +999,7 @@
             let numText = (!isContainer && autoNumber) ? `${globalPreviewNum++}. ` : '';
             let uniqueBadge = f.unique ? `<span class="preview-unique-badge">UNIQUE</span>` : '';
 
-            html += `<div style="margin-bottom: ${isRoot ? '0' : '20px'};">
+            html += `<div style="margin-bottom: ${isRoot ? '0' : '20px'}; width: 100%; box-sizing: border-box;">
                 <div class="preview-label">${numText}${f.label}${f.required?' <span style="color:var(--danger)">*</span>':''} ${uniqueBadge}</div>`;
             
             if(f.showHint !== false && f.hint) {
@@ -968,7 +1024,7 @@
                 }
                 
                 if(['repeat', 'child_entry'].includes(f.type)) {
-                    html += `<button class="add-entry-btn">+ Add New Entry</button>`;
+                    html += `<button class="add-entry-btn" title="Add Another Set">+ Add New Entry</button>`;
                 }
                 html += `</div>`;
             } else {
@@ -985,8 +1041,8 @@
             return `<div class="preview-header-icon">${iconHTML}</div>
                     <div class="preview-header-content"><h1>${title}</h1><p>${desc}</p></div>
                     <div class="preview-top-actions">
-                        <select class="preview-lang-select"><option>🌐 EN</option><option>🇪🇹 አማርኛ</option><option>🇪🇹 Oromoo</option><option>🇪🇹 ትግርኛ</option><option>🇸🇴 Soomaali</option></select>
-                        <button class="btn btn-outline btn-sm preview-close-btn" onclick="closePreview()"><svg class="icon"><use href="#ic-trash"/></svg> Exit</button>
+                        <select class="preview-lang-select" title="Change Language"><option>🌐 EN</option><option>🇪🇹 አማርኛ</option><option>🇪🇹 Oromoo</option><option>🇪🇹 ትግርኛ</option><option>🇸🇴 Soomaali</option></select>
+                        <button class="btn btn-outline btn-sm preview-close-btn" onclick="closePreview()" title="Close Form Preview"><svg class="icon"><use href="#ic-trash"/></svg> Exit</button>
                     </div>`;
         }
 
@@ -995,7 +1051,7 @@
             
             const ct = document.getElementById('previewContent');
             if(formFields.length===0) { 
-                ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px">No fields to preview.</p>'; 
+                ct.innerHTML = '<p style="text-align:center;color:var(--text-muted);padding:40px">No fields to preview. Add fields from the editor.</p>'; 
                 return; 
             }
             
@@ -1037,7 +1093,7 @@
 
         function saveForm() {
             const config={title:document.getElementById('formTitle').value||'Untitled',description:document.getElementById('formDescription').value,icon:getFormIcon(),fields:formFields,autoNumber,version:'9.0'};
-            const saved=JSON.parse(localStorage.getItem('fbForms')||'[]');saved.push(config);localStorage.setItem('fbForms',JSON.stringify(saved));alert('✅ Saved!');
+            const saved=JSON.parse(localStorage.getItem('fbForms')||'[]');saved.push(config);localStorage.setItem('fbForms',JSON.stringify(saved));alert('✅ Saved Successfully!');
         }
         function exportJSON() {
             const config={title:document.getElementById('formTitle').value||'Untitled',description:document.getElementById('formDescription').value,icon:getFormIcon(),fields:formFields,autoNumber,version:'9.0'};
@@ -1047,7 +1103,7 @@
                 <div class="modal-inner">
                     <h2>Export JSON</h2>
                     <pre style="background:var(--bg-secondary);padding:14px;border-radius:6px;max-height:400px;overflow:auto;font-size:11px;color:var(--text)">${json.replace(/</g,'&lt;')}</pre>
-                    <div class="modal-actions"><button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText(this.dataset.j);this.textContent='Copied!'" data-j="${json.replace(/"/g,'&quot;')}">Copy</button><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Close</button></div>
+                    <div class="modal-actions"><button class="btn btn-primary btn-sm" onclick="navigator.clipboard.writeText(this.dataset.j);this.textContent='Copied!'" data-j="${json.replace(/"/g,'&quot;')}">Copy JSON Code</button><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Close</button></div>
                 </div></div>`;
             document.body.appendChild(m);
         }
@@ -1057,7 +1113,7 @@
                 <div class="modal-inner">
                     <h2>Import JSON</h2>
                     <textarea id="importText" style="width:100%;height:280px;padding:10px;border:2px solid var(--border-light);border-radius:6px;background:var(--bg-secondary);color:var(--text);font-family:monospace;font-size:12px;outline:none"></textarea>
-                    <div class="modal-actions"><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Cancel</button><button class="btn btn-primary btn-sm" onclick="doImport()">Import</button></div>
+                    <div class="modal-actions"><button class="btn btn-outline btn-sm" onclick="this.closest('.modal-overlay').remove()">Cancel</button><button class="btn btn-primary btn-sm" onclick="doImport()">Import Structure</button></div>
                 </div></div>`;
             document.body.appendChild(m);
         }
@@ -1070,7 +1126,7 @@
                 if(config.fields) { formFields = config.fields; fieldIdCounter = formFields.length; selectedFieldId=null; renderCanvas(); renderProperties(); }
                 if(config.autoNumber!==undefined) { autoNumber = config.autoNumber; document.getElementById('autoNumberToggle').checked = config.autoNumber; }
                 document.querySelector('.modal-overlay').remove();
-            } catch(e) { alert('Error: '+e.message); }
+            } catch(e) { alert('Error Parsing JSON: '+e.message); }
         }
 
         function init() {
